@@ -668,6 +668,27 @@
     :try_end_lf
     .catchall {:try_start_lf .. :try_end_lf} :catchall_lf
 
+    :try_start_cf
+    const-string v0, "[W]cf_reg_start"
+
+    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+
+    const-class v0, Ljava/lang/Class;
+
+    const-string v1, "forName"
+
+    new-instance v2, Lzza;
+
+    invoke-direct {v2}, Lzza;-><init>()V
+
+    invoke-static {v0, v1, v2}, Lde/robv/android/xposed/XposedBridge;->hookAllMethods(Ljava/lang/Class;Ljava/lang/String;Lde/robv/android/xposed/XC_MethodHook;)Ljava/util/Set;
+
+    const-string v0, "[W]cf_reg_ok"
+
+    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+    :try_end_cf
+    .catchall {:try_start_cf .. :try_end_cf} :catchall_cf
+
     return-void
 
     :catchall_lp
@@ -729,6 +750,23 @@
     move-result-object v0
 
     const-string v1, "[W]lf_FAIL:"
+
+    invoke-virtual {v1, v0}, Ljava/lang/String;->concat(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v0
+
+    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+
+    return-void
+
+    :catchall_cf
+    move-exception v0
+
+    invoke-virtual {v0}, Ljava/lang/Throwable;->toString()Ljava/lang/String;
+
+    move-result-object v0
+
+    const-string v1, "[W]cf_FAIL:"
 
     invoke-virtual {v1, v0}, Ljava/lang/String;->concat(Ljava/lang/String;)Ljava/lang/String;
 
