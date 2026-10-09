@@ -29,6 +29,8 @@
 
     if-eqz v0, :cond_end
 
+    check-cast v0, Landroid/media/MediaMetadata;
+
     const-string v1, "android.media.metadata.MEDIA_ID"
 
     invoke-virtual {v0, v1}, Landroid/media/MediaMetadata;->getString(Ljava/lang/String;)Ljava/lang/String;

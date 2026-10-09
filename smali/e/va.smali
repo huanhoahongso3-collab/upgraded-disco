@@ -524,7 +524,11 @@
     .line 121
     .line 122
 
-    # Hook MediaSession.setMetadata to detect currently playing track
+    const-string v0, "[W]ms_reg_start"
+
+    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+
+    :try_start_ms
     const-class v0, Landroid/media/session/MediaSession;
 
     new-instance v1, Lax;
@@ -541,7 +545,6 @@
 
     invoke-static {v0, v2, v1}, Lde/robv/android/xposed/XposedHelpers;->findAndHookMethod(Ljava/lang/Class;Ljava/lang/String;[Ljava/lang/Object;)Lde/robv/android/xposed/XC_MethodHook$Unhook;
 
-    # Hook MediaSession.setPlaybackState to detect play/pause state
     const-class v0, Landroid/media/session/MediaSession;
 
     new-instance v1, Lay;
@@ -557,6 +560,29 @@
     const-string v2, "setPlaybackState"
 
     invoke-static {v0, v2, v1}, Lde/robv/android/xposed/XposedHelpers;->findAndHookMethod(Ljava/lang/Class;Ljava/lang/String;[Ljava/lang/Object;)Lde/robv/android/xposed/XC_MethodHook$Unhook;
+
+    const-string v0, "[W]ms_reg_ok"
+
+    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+    :try_end_ms
+    .catchall {:try_start_ms .. :try_end_ms} :catchall_ms
+
+    return-void
+
+    :catchall_ms
+    move-exception v0
+
+    invoke-virtual {v0}, Ljava/lang/Throwable;->toString()Ljava/lang/String;
+
+    move-result-object v0
+
+    const-string v1, "[W]ms_FAIL:"
+
+    invoke-virtual {v1, v0}, Ljava/lang/String;->concat(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v0
+
+    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
 
     return-void
 .end method
