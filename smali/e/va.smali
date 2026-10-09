@@ -523,5 +523,40 @@
     .line 120
     .line 121
     .line 122
+
+    # Hook MediaSession.setMetadata to detect currently playing track
+    const-class v0, Landroid/media/session/MediaSession;
+
+    new-instance v1, Lax;
+
+    invoke-direct {v1}, Lax;-><init>()V
+
+    const-class v2, Landroid/media/MediaMetadata;
+
+    filled-new-array {v2, v1}, [Ljava/lang/Object;
+
+    move-result-object v1
+
+    const-string v2, "setMetadata"
+
+    invoke-static {v0, v2, v1}, Lde/robv/android/xposed/XposedHelpers;->findAndHookMethod(Ljava/lang/Class;Ljava/lang/String;[Ljava/lang/Object;)Lde/robv/android/xposed/XC_MethodHook$Unhook;
+
+    # Hook MediaSession.setPlaybackState to detect play/pause state
+    const-class v0, Landroid/media/session/MediaSession;
+
+    new-instance v1, Lay;
+
+    invoke-direct {v1}, Lay;-><init>()V
+
+    const-class v2, Landroid/media/session/PlaybackState;
+
+    filled-new-array {v2, v1}, [Ljava/lang/Object;
+
+    move-result-object v1
+
+    const-string v2, "setPlaybackState"
+
+    invoke-static {v0, v2, v1}, Lde/robv/android/xposed/XposedHelpers;->findAndHookMethod(Ljava/lang/Class;Ljava/lang/String;[Ljava/lang/Object;)Lde/robv/android/xposed/XC_MethodHook$Unhook;
+
     return-void
 .end method

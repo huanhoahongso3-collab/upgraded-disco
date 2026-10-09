@@ -6,6 +6,10 @@
 # static fields
 .field public static capturedToken:Ljava/lang/String;
 
+.field public static nativeTrackId:Ljava/lang/String;
+
+.field public static nativeIsPlaying:Z
+
 # instance fields
 .field public final a:Landroid/content/Context;
 
@@ -46,6 +50,40 @@
     .line 4
     :cond_0
     return-object v0
+.end method
+
+.method public final getLastNativeTrackId()Ljava/lang/String;
+    .locals 2
+    .annotation runtime Landroid/webkit/JavascriptInterface;
+    .end annotation
+
+    sget-boolean v0, Ler;->nativeIsPlaying:Z
+
+    if-nez v0, :cond_playing
+
+    const-string v0, ""
+
+    return-object v0
+
+    :cond_playing
+    sget-object v1, Ler;->nativeTrackId:Ljava/lang/String;
+
+    if-nez v1, :cond_has_track
+
+    const-string v1, ""
+
+    :cond_has_track
+    return-object v1
+.end method
+
+.method public final getNativeIsPlaying()Z
+    .locals 1
+    .annotation runtime Landroid/webkit/JavascriptInterface;
+    .end annotation
+
+    sget-boolean v0, Ler;->nativeIsPlaying:Z
+
+    return v0
 .end method
 
 # virtual methods
