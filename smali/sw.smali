@@ -119,6 +119,24 @@
 
     invoke-virtual {v2, v3, v4, v5}, Landroid/os/Handler;->postDelayed(Ljava/lang/Runnable;J)Z
 
+    # Second attempt at 12s: web player may need extra time to register
+    new-instance v3, Lsw2;
+
+    invoke-direct {v3}, Lsw2;-><init>()V
+
+    const-wide/16 v4, 0x2EE0
+
+    invoke-virtual {v2, v3, v4, v5}, Landroid/os/Handler;->postDelayed(Ljava/lang/Runnable;J)Z
+
+    # Third attempt at 20s: some sessions register even later
+    new-instance v3, Lsw2;
+
+    invoke-direct {v3}, Lsw2;-><init>()V
+
+    const-wide/16 v4, 0x4E20
+
+    invoke-virtual {v2, v3, v4, v5}, Landroid/os/Handler;->postDelayed(Ljava/lang/Runnable;J)Z
+
     goto :end
 
     :found
@@ -150,6 +168,24 @@
     invoke-direct {v3}, Lsw2;-><init>()V
 
     const-wide/16 v4, 0x157C
+
+    invoke-virtual {v2, v3, v4, v5}, Landroid/os/Handler;->postDelayed(Ljava/lang/Runnable;J)Z
+
+    # Second attempt at 12s: web player may need extra time to register
+    new-instance v3, Lsw2;
+
+    invoke-direct {v3}, Lsw2;-><init>()V
+
+    const-wide/16 v4, 0x2EE0
+
+    invoke-virtual {v2, v3, v4, v5}, Landroid/os/Handler;->postDelayed(Ljava/lang/Runnable;J)Z
+
+    # Third attempt at 20s: some sessions register even later
+    new-instance v3, Lsw2;
+
+    invoke-direct {v3}, Lsw2;-><init>()V
+
+    const-wide/16 v4, 0x4E20
 
     invoke-virtual {v2, v3, v4, v5}, Landroid/os/Handler;->postDelayed(Ljava/lang/Runnable;J)Z
 

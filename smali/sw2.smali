@@ -101,15 +101,18 @@
 
     if-eqz v2, :no_compose
 
-    # --- Loop through all windows to find one containing compose_view ---
+    # --- Loop backward through windows (newest first) to find Connect panel's compose_view ---
+    # The Connect dialog is added after the main activity in mViews, so searching backward
+    # finds it first. The screenY >= 300px guard rejects the main activity's compose_view
+    # (which sits at the top of the screen), preventing accidental taps on the home UI.
     invoke-interface {v0}, Ljava/util/List;->size()I
 
     move-result v3
 
-    const/4 v4, 0x0
+    add-int/lit8 v4, v3, -0x1
 
     :win_loop
-    if-ge v4, v3, :no_compose
+    if-ltz v4, :no_compose
 
     invoke-interface {v0, v4}, Ljava/util/List;->get(I)Ljava/lang/Object;
 
@@ -121,14 +124,49 @@
 
     move-result-object v6
 
-    if-nez v6, :found_compose
+    if-eqz v6, :next_win
 
-    add-int/lit8 v4, v4, 0x1
+    # compose_view found; confirm it lives in the Connect bottom sheet (screenY >= 300px).
+    # The main activity's compose_view starts near Y=0; the Connect panel is below Y=300.
+    const/4 v7, 0x2
+
+    new-array v7, v7, [I
+
+    invoke-virtual {v6, v7}, Landroid/view/View;->getLocationOnScreen([I)V
+
+    const/4 v3, 0x1
+
+    aget v3, v7, v3
+
+    const/16 v7, 0x12C
+
+    if-ge v3, v7, :found_compose
+
+    :next_win
+    add-int/lit8 v4, v4, -0x1
 
     goto :win_loop
 
     # v5 = dialog root view, v6 = compose_view
     :found_compose
+
+    # Log compose_view.screenY and window index for diagnostics
+    new-instance v7, Ljava/lang/StringBuilder;
+    invoke-direct {v7}, Ljava/lang/StringBuilder;-><init>()V
+    const-string v0, "[W]swp:cv_sy:"
+    invoke-virtual {v7, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    move-result-object v7
+    invoke-virtual {v7, v3}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+    move-result-object v7
+    const-string v0, ",wi:"
+    invoke-virtual {v7, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    move-result-object v7
+    invoke-virtual {v7, v4}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+    move-result-object v7
+    invoke-virtual {v7}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+    move-result-object v0
+    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+
     # Get compose_view location on screen -> int[2] in v7
     const/4 v7, 0x2
 
@@ -137,13 +175,39 @@
     invoke-virtual {v6, v7}, Landroid/view/View;->getLocationOnScreen([I)V
 
     # tapY: use Compose AccessibilityNodeProvider to find "Web Player" row by text.
-    # Works correctly with any number of Connect devices in the list.
-    # Falls back to v5.height - 510dp*density if the provider is unavailable.
+    # Spotify's compose_view id may refer to a FrameLayout wrapper; the real ComposeView
+    # is child[0] of that wrapper and carries the AccessibilityNodeProvider.
+    # Inner try: if accessibility throws (e.g. unsealed node), fall through to coordinate fallback.
+    :try_start_a11y
     invoke-virtual {v6}, Landroid/view/View;->getAccessibilityNodeProvider()Landroid/view/accessibility/AccessibilityNodeProvider;
 
     move-result-object v0
 
+    if-nez v0, :have_provider
+
+    check-cast v6, Landroid/view/ViewGroup;
+
+    invoke-virtual {v6}, Landroid/view/ViewGroup;->getChildCount()I
+
+    move-result v1
+
+    if-lez v1, :tap_fallback
+
+    const/4 v1, 0x0
+
+    invoke-virtual {v6, v1}, Landroid/view/ViewGroup;->getChildAt(I)Landroid/view/View;
+
+    move-result-object v1
+
+    if-eqz v1, :tap_fallback
+
+    invoke-virtual {v1}, Landroid/view/View;->getAccessibilityNodeProvider()Landroid/view/accessibility/AccessibilityNodeProvider;
+
+    move-result-object v0
+
     if-eqz v0, :tap_fallback
+
+    :have_provider
 
     const/4 v1, -0x1
 
@@ -190,6 +254,7 @@
     invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
 
     goto :tap_got_y
+    :try_end_a11y
 
     :tap_fallback
 
@@ -197,6 +262,7 @@
 
     invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
 
+    # tapY = v5.getHeight() (window root = 2400px, full screen) - dp*density
     invoke-virtual {v5}, Landroid/view/View;->getHeight()I
 
     move-result v14
@@ -213,8 +279,8 @@
 
     iget v0, v0, Landroid/util/DisplayMetrics;->density:F
 
-    # 510.0f = 0x43FF0000; dp from screen bottom to Web Player center (density-scaled)
-    const/high16 v2, 0x43FF0000
+    # 520.0f = 0x44020000; dp from screen bottom → tapY=939px at density 2.81 (within Web Player row)
+    const/high16 v2, 0x44020000
 
     mul-float/2addr v0, v2
 
@@ -237,14 +303,15 @@
 
     add-int v13, v0, v1
 
-    # Get dialog root location -> int[2] in v7
+    # Convert screen tap coords to v6 (compose_view) local coords.
+    # Dispatching to v6 directly skips CoordinatorLayout/BottomSheetBehavior which
+    # intercepts events dispatched to the window root before they reach Compose.
     const/4 v7, 0x2
 
     new-array v7, v7, [I
 
-    invoke-virtual {v5, v7}, Landroid/view/View;->getLocationOnScreen([I)V
+    invoke-virtual {v6, v7}, Landroid/view/View;->getLocationOnScreen([I)V
 
-    # Convert tap to root-local coordinates
     const/4 v0, 0x0
 
     aget v0, v7, v0
@@ -257,7 +324,7 @@
 
     sub-int/2addr v14, v0
 
-    # v13 = localX (int), v14 = localY (int)
+    # v13 = localX, v14 = localY (in v6 coordinate space)
 
     # Log tap coords
     new-instance v0, Ljava/lang/StringBuilder;
@@ -317,7 +384,7 @@
 
     move-result-object v0
 
-    invoke-virtual {v5, v0}, Landroid/view/View;->dispatchTouchEvent(Landroid/view/MotionEvent;)Z
+    invoke-virtual {v6, v0}, Landroid/view/View;->dispatchTouchEvent(Landroid/view/MotionEvent;)Z
 
     invoke-virtual {v0}, Landroid/view/MotionEvent;->recycle()V
 
@@ -336,7 +403,7 @@
 
     move-result-object v0
 
-    invoke-virtual {v5, v0}, Landroid/view/View;->dispatchTouchEvent(Landroid/view/MotionEvent;)Z
+    invoke-virtual {v6, v0}, Landroid/view/View;->dispatchTouchEvent(Landroid/view/MotionEvent;)Z
 
     invoke-virtual {v0}, Landroid/view/MotionEvent;->recycle()V
 
@@ -361,6 +428,7 @@
     goto :end
     :try_end
 
+    .catch Ljava/lang/Exception; {:try_start_a11y .. :try_end_a11y} :tap_fallback
     .catch Ljava/lang/Exception; {:try_start .. :try_end} :catch_err
 
     :catch_err
