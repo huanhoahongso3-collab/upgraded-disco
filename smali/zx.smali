@@ -64,6 +64,8 @@
 
     :cond_has_key
 
+    check-cast v1, Ljava/lang/String;
+
     invoke-virtual {v2, v1}, Ljava/lang/String;->concat(Ljava/lang/String;)Ljava/lang/String;
 
     move-result-object v1

@@ -567,35 +567,6 @@
     :try_end_ms
     .catchall {:try_start_ms .. :try_end_ms} :catchall_ms
 
-    :try_start_sg
-    const-string v0, "[W]sg_reg_start"
-
-    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
-
-    const-string v0, "android.app.ContextImpl"
-
-    const/4 v1, 0x0
-
-    new-instance v2, Lzw;
-
-    invoke-direct {v2}, Lzw;-><init>()V
-
-    const-class v3, Landroid/content/Intent;
-
-    filled-new-array {v3, v2}, [Ljava/lang/Object;
-
-    move-result-object v2
-
-    const-string v3, "sendBroadcast"
-
-    invoke-static {v0, v1, v3, v2}, Lde/robv/android/xposed/XposedHelpers;->findAndHookMethod(Ljava/lang/String;Ljava/lang/ClassLoader;Ljava/lang/String;[Ljava/lang/Object;)Lde/robv/android/xposed/XC_MethodHook$Unhook;
-
-    const-string v0, "[W]sg_reg_ok"
-
-    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
-    :try_end_sg
-    .catchall {:try_start_sg .. :try_end_sg} :catchall_sg
-
     :try_start_lp
     const-string v0, "[W]lp_reg_start"
 
@@ -635,23 +606,6 @@
     move-result-object v0
 
     const-string v1, "[W]lp_FAIL:"
-
-    invoke-virtual {v1, v0}, Ljava/lang/String;->concat(Ljava/lang/String;)Ljava/lang/String;
-
-    move-result-object v0
-
-    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
-
-    return-void
-
-    :catchall_sg
-    move-exception v0
-
-    invoke-virtual {v0}, Ljava/lang/Throwable;->toString()Ljava/lang/String;
-
-    move-result-object v0
-
-    const-string v1, "[W]sg_FAIL:"
 
     invoke-virtual {v1, v0}, Ljava/lang/String;->concat(Ljava/lang/String;)Ljava/lang/String;
 

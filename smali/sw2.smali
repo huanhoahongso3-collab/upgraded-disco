@@ -136,13 +136,18 @@
 
     invoke-virtual {v6, v7}, Landroid/view/View;->getLocationOnScreen([I)V
 
-    # tapScreenY = composeScreenY + (int)(218dp * displayDensity)
-    # 218dp is the offset from compose_view top to Web Player row center
-    # (measured at 420dpi: 218 * 2.625 = 572px).  Scaling by density
-    # makes it correct on any phone density.
+    # tapY = dialog root height - (int)(549dp * density)
+    # Web Player is always the last Connect device; 549dp is its fixed distance
+    # from screen bottom (measured on 1080x2400 @ 420dpi, density-scaled to any device).
+    # Using the dialog root (v5) height avoids relying on compose_view's layout height,
+    # which can be larger than the visible area.
     const/4 v1, 0x1
 
     aget v1, v7, v1
+
+    invoke-virtual {v5}, Landroid/view/View;->getHeight()I
+
+    move-result v14
 
     # Get displayMetrics.density from activity resources
     sget-object v0, Ler;->activity:Landroid/app/Activity;
@@ -157,14 +162,14 @@
 
     iget v0, v0, Landroid/util/DisplayMetrics;->density:F
 
-    # 218.0f * density → int offset
-    const/high16 v2, 0x43590000
+    # 549.0f = 0x44094000; density-scaled offset from screen bottom to Web Player center
+    const v2, 0x44094000
 
     mul-float/2addr v0, v2
 
     float-to-int v0, v0
 
-    add-int v14, v1, v0
+    sub-int/2addr v14, v0
 
     # tapScreenX = composeScreenX (v7[0]) + composeWidth/2
     const/4 v0, 0x0
