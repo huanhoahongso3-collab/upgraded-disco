@@ -54,15 +54,29 @@
     move-result-object v1
 
     :cond_store
+    # Compare old vs new track ID; only switch device when track actually changed
+    sget-object v2, Ler;->nativeTrackId:Ljava/lang/String;
+
     sput-object v1, Ler;->nativeTrackId:Ljava/lang/String;
 
-    const-string v2, "[W]nat:"
+    const-string v3, "[W]nat:"
 
-    invoke-virtual {v2, v1}, Ljava/lang/String;->concat(Ljava/lang/String;)Ljava/lang/String;
+    invoke-virtual {v3, v1}, Ljava/lang/String;->concat(Ljava/lang/String;)Ljava/lang/String;
 
-    move-result-object v2
+    move-result-object v3
 
-    invoke-static {v2}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+    invoke-static {v3}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+
+    if-eqz v2, :do_switch
+
+    invoke-virtual {v1, v2}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v3
+
+    if-nez v3, :cond_end
+
+    :do_switch
+    invoke-static {}, Ler;->switchToWebPlayer()V
 
     :cond_end
     return-void

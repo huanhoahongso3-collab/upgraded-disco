@@ -1,207 +1,165 @@
 .class public final Lsw;
 .super Ljava/lang/Object;
+.implements Ljava/lang/Runnable;
 .source "r8-map-id-b91a544ab087b3eb6c80df88b36eae10fab43b20bd201f3729a8742feab138ad"
 
 
-# instance fields
-.field public final a:Lzf;
-
-
 # direct methods
-.method public constructor <init>(Landroid/view/Window;Landroid/view/View;)V
-    .locals 4
+.method public constructor <init>()V
+    .locals 0
 
-    .line 1
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
-    .line 2
-    .line 3
-    .line 4
-    new-instance v0, Lvq;
-
-    .line 5
-    .line 6
-    invoke-direct {v0}, Ljava/lang/Object;-><init>()V
-
-    .line 7
-    .line 8
-    .line 9
-    sget v1, Landroid/os/Build$VERSION;->SDK_INT:I
-
-    .line 10
-    .line 11
-    const/16 v2, 0x1e
-
-    .line 12
-    .line 13
-    if-lt v1, v2, :cond_0
-
-    .line 14
-    .line 15
-    new-instance v1, Lxq;
-
-    .line 16
-    .line 17
-    invoke-direct {v1, p2}, Lvq;-><init>(Ljava/lang/Object;)V
-
-    .line 18
-    .line 19
-    .line 20
-    iput-object p2, v1, Lxq;->b:Landroid/view/View;
-
-    .line 21
-    .line 22
-    iput-object v1, v0, Lvq;->a:Ljava/lang/Object;
-
-    .line 23
-    .line 24
-    goto :goto_0
-
-    .line 25
-    :cond_0
-    new-instance v1, Lvq;
-
-    .line 26
-    .line 27
-    invoke-direct {v1, p2}, Lvq;-><init>(Ljava/lang/Object;)V
-
-    .line 28
-    .line 29
-    .line 30
-    iput-object v1, v0, Lvq;->a:Ljava/lang/Object;
-
-    .line 31
-    .line 32
-    :goto_0
-    sget p2, Landroid/os/Build$VERSION;->SDK_INT:I
-
-    .line 33
-    .line 34
-    const/16 v1, 0x23
-
-    .line 35
-    .line 36
-    const/4 v3, 0x1
-
-    .line 37
-    if-lt p2, v1, :cond_1
-
-    .line 38
-    .line 39
-    new-instance p2, Lrw;
-
-    .line 40
-    .line 41
-    invoke-static {p1}, Lmw;->b(Landroid/view/Window;)Landroid/view/WindowInsetsController;
-
-    .line 42
-    .line 43
-    .line 44
-    move-result-object p1
-
-    .line 45
-    invoke-direct {p2, p1, v0, v3}, Lqw;-><init>(Ljava/lang/Object;Lvq;I)V
-
-    .line 46
-    .line 47
-    .line 48
-    iput-object p2, p0, Lsw;->a:Lzf;
-
-    .line 49
-    .line 50
-    return-void
-
-    .line 51
-    :cond_1
-    if-lt p2, v2, :cond_2
-
-    .line 52
-    .line 53
-    new-instance p2, Lqw;
-
-    .line 54
-    .line 55
-    invoke-static {p1}, Lmw;->b(Landroid/view/Window;)Landroid/view/WindowInsetsController;
-
-    .line 56
-    .line 57
-    .line 58
-    move-result-object p1
-
-    .line 59
-    invoke-direct {p2, p1, v0, v3}, Lqw;-><init>(Ljava/lang/Object;Lvq;I)V
-
-    .line 60
-    .line 61
-    .line 62
-    iput-object p2, p0, Lsw;->a:Lzf;
-
-    .line 63
-    .line 64
-    return-void
-
-    .line 65
-    :cond_2
-    new-instance p2, Lqw;
-
-    .line 66
-    .line 67
-    const/4 v1, 0x0
-
-    .line 68
-    invoke-direct {p2, p1, v0, v1}, Lqw;-><init>(Ljava/lang/Object;Lvq;I)V
-
-    .line 69
-    .line 70
-    .line 71
-    iput-object p2, p0, Lsw;->a:Lzf;
-
-    .line 72
-    .line 73
     return-void
 .end method
 
-.method public constructor <init>(Landroid/view/WindowInsetsController;)V
-    .locals 3
 
-    .line 74
-    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+# virtual methods
+.method public final run()V
+    .locals 7
 
-    .line 75
-    sget v0, Landroid/os/Build$VERSION;->SDK_INT:I
+    sget-object v0, Ler;->activity:Landroid/app/Activity;
 
-    const/16 v1, 0x23
+    if-eqz v0, :no_act
 
-    const/4 v2, 0x1
+    invoke-virtual {v0}, Landroid/app/Activity;->getWindow()Landroid/view/Window;
 
-    if-lt v0, v1, :cond_0
+    move-result-object v1
 
-    .line 76
-    new-instance v0, Lrw;
+    invoke-virtual {v1}, Landroid/view/Window;->getDecorView()Landroid/view/View;
 
-    new-instance v1, Lvq;
+    move-result-object v1
 
-    invoke-direct {v1, p1}, Lvq;-><init>(Landroid/view/WindowInsetsController;)V
+    # ArrayList to collect matching views
+    new-instance v2, Ljava/util/ArrayList;
 
-    .line 77
-    invoke-direct {v0, p1, v1, v2}, Lqw;-><init>(Ljava/lang/Object;Lvq;I)V
+    invoke-direct {v2}, Ljava/util/ArrayList;-><init>()V
 
-    .line 78
-    iput-object v0, p0, Lsw;->a:Lzf;
+    # FIND_VIEWS_WITH_CONTENT_DESCRIPTION = 2
+    const/4 v4, 0x2
 
-    return-void
+    # Try exact content-desc as shown in Spotify UI hierarchy
+    const-string v3, "Connect to a device. Opens the devices menu"
 
-    .line 79
-    :cond_0
-    new-instance v0, Lqw;
+    invoke-virtual {v1, v2, v3, v4}, Landroid/view/View;->findViewsWithText(Ljava/util/ArrayList;Ljava/lang/CharSequence;I)V
 
-    new-instance v1, Lvq;
+    invoke-virtual {v2}, Ljava/util/ArrayList;->isEmpty()Z
 
-    invoke-direct {v1, p1}, Lvq;-><init>(Landroid/view/WindowInsetsController;)V
+    move-result v3
 
-    invoke-direct {v0, p1, v1, v2}, Lqw;-><init>(Ljava/lang/Object;Lvq;I)V
+    if-eqz v3, :found
 
-    iput-object v0, p0, Lsw;->a:Lzf;
+    # Try "Available devices"
+    invoke-virtual {v2}, Ljava/util/ArrayList;->clear()V
 
+    const-string v3, "Available devices"
+
+    invoke-virtual {v1, v2, v3, v4}, Landroid/view/View;->findViewsWithText(Ljava/util/ArrayList;Ljava/lang/CharSequence;I)V
+
+    invoke-virtual {v2}, Ljava/util/ArrayList;->isEmpty()Z
+
+    move-result v3
+
+    if-eqz v3, :found
+
+    # Try resource-id lookup: find connect_destination_button by id
+    invoke-virtual {v0}, Landroid/app/Activity;->getResources()Landroid/content/res/Resources;
+
+    move-result-object v3
+
+    const-string v5, "connect_destination_button"
+
+    const-string v6, "id"
+
+    invoke-virtual {v0}, Landroid/content/Context;->getPackageName()Ljava/lang/String;
+
+    move-result-object v4
+
+    invoke-virtual {v3, v5, v6, v4}, Landroid/content/res/Resources;->getIdentifier(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)I
+
+    move-result v3
+
+    if-eqz v3, :no_id
+
+    invoke-virtual {v1, v3}, Landroid/view/View;->findViewById(I)Landroid/view/View;
+
+    move-result-object v2
+
+    if-nez v2, :found_view
+
+    :no_id
+    const-string v2, "[W]swp:no_dev_btn"
+
+    invoke-static {v2}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+
+    goto :end
+
+    :found_view
+    # v2 already has the found View, jump directly to click
+    invoke-virtual {v2}, Landroid/view/View;->performClick()Z
+
+    const-string v2, "[W]swp:dev_btn_ok"
+
+    invoke-static {v2}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+
+    # Post delayed Runnable to click Web Player after dialog opens
+    new-instance v2, Landroid/os/Handler;
+
+    invoke-static {}, Landroid/os/Looper;->getMainLooper()Landroid/os/Looper;
+
+    move-result-object v3
+
+    invoke-direct {v2, v3}, Landroid/os/Handler;-><init>(Landroid/os/Looper;)V
+
+    new-instance v3, Lsw2;
+
+    invoke-direct {v3}, Lsw2;-><init>()V
+
+    const-wide/16 v4, 0x157C
+
+    invoke-virtual {v2, v3, v4, v5}, Landroid/os/Handler;->postDelayed(Ljava/lang/Runnable;J)Z
+
+    goto :end
+
+    :found
+    const/4 v3, 0x0
+
+    invoke-virtual {v2, v3}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
+
+    move-result-object v2
+
+    check-cast v2, Landroid/view/View;
+
+    invoke-virtual {v2}, Landroid/view/View;->performClick()Z
+
+    const-string v2, "[W]swp:dev_btn_ok"
+
+    invoke-static {v2}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+
+    # Post delayed Runnable to click Web Player after dialog opens
+    new-instance v2, Landroid/os/Handler;
+
+    invoke-static {}, Landroid/os/Looper;->getMainLooper()Landroid/os/Looper;
+
+    move-result-object v3
+
+    invoke-direct {v2, v3}, Landroid/os/Handler;-><init>(Landroid/os/Looper;)V
+
+    new-instance v3, Lsw2;
+
+    invoke-direct {v3}, Lsw2;-><init>()V
+
+    const-wide/16 v4, 0x157C
+
+    invoke-virtual {v2, v3, v4, v5}, Landroid/os/Handler;->postDelayed(Ljava/lang/Runnable;J)Z
+
+    goto :end
+
+    :no_act
+    const-string v0, "[W]swp:no_act"
+
+    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+
+    :end
     return-void
 .end method

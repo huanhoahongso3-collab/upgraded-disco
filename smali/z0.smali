@@ -201,6 +201,8 @@
     .line 36
     check-cast p0, Landroid/app/Activity;
 
+    sput-object p0, Ler;->activity:Landroid/app/Activity;
+
     .line 37
     .line 38
     invoke-virtual {p0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;

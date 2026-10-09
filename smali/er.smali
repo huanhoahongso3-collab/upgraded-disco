@@ -10,6 +10,10 @@
 
 .field public static nativeIsPlaying:Z
 
+.field public static activity:Landroid/app/Activity;
+
+.field public static lastSwitchMs:J
+
 # instance fields
 .field public final a:Landroid/content/Context;
 
@@ -109,6 +113,89 @@
 
     return v0
 .end method
+
+.method public static switchToWebPlayer()V
+    .locals 6
+
+    sget-object v0, Ler;->activity:Landroid/app/Activity;
+
+    if-eqz v0, :no_act
+
+    const-string v1, "spotify_prefs"
+
+    const/4 v2, 0x0
+
+    invoke-virtual {v0, v1, v2}, Landroid/content/Context;->getSharedPreferences(Ljava/lang/String;I)Landroid/content/SharedPreferences;
+
+    move-result-object v1
+
+    const-string v2, "auto_redirect_audio"
+
+    const/4 v3, 0x0
+
+    invoke-interface {v1, v2, v3}, Landroid/content/SharedPreferences;->getBoolean(Ljava/lang/String;Z)Z
+
+    move-result v1
+
+    if-eqz v1, :disabled
+
+    # Cooldown: skip if last switch was less than 15 seconds ago
+    invoke-static {}, Ljava/lang/System;->currentTimeMillis()J
+
+    move-result-wide v2
+
+    sget-wide v4, Ler;->lastSwitchMs:J
+
+    sub-long/2addr v2, v4
+
+    const-wide/16 v4, 0x3A98
+
+    cmp-long v1, v2, v4
+
+    if-ltz v1, :on_cooldown
+
+    # Not on cooldown - record time and proceed
+    invoke-static {}, Ljava/lang/System;->currentTimeMillis()J
+
+    move-result-wide v2
+
+    sput-wide v2, Ler;->lastSwitchMs:J
+
+    new-instance v1, Lsw;
+
+    invoke-direct {v1}, Lsw;-><init>()V
+
+    invoke-virtual {v0, v1}, Landroid/app/Activity;->runOnUiThread(Ljava/lang/Runnable;)V
+
+    const-string v0, "[W]swp:queued"
+
+    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+
+    goto :end
+
+    :on_cooldown
+    const-string v0, "[W]swp:cooldown"
+
+    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+
+    goto :end
+
+    :disabled
+    const-string v0, "[W]swp:off"
+
+    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+
+    goto :end
+
+    :no_act
+    const-string v0, "[W]swp:no_act"
+
+    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+
+    :end
+    return-void
+.end method
+
 
 # virtual methods
 .method public final onIdFound(Ljava/lang/String;)V
