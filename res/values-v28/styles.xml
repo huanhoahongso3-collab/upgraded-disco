@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Base.Theme.AppCompat.Light" parent="@style/Base.V28.Theme.AppCompat.Light" />
+    <style name="Base.V28.Theme.AppCompat.Light" parent="@style/Base.V26.Theme.AppCompat.Light">
+        <item name="dialogCornerRadius">?android:dialogCornerRadius</item>
+    </style>
+    <style name="Widget.Material3.SearchBar" parent="@android:style/Widget">
+        <item name="android:textAppearance">@style/TextAppearance.Material3.SearchBar</item>
+        <item name="android:minHeight">@dimen/m3_searchbar_height</item>
+        <item name="android:paddingStart">@dimen/m3_searchbar_padding_start</item>
+        <item name="android:touchscreenBlocksFocus">false</item>
+        <item name="android:outlineSpotShadowColor">@android:color/transparent</item>
+        <item name="android:outlineAmbientShadowColor">@android:color/transparent</item>
+        <item name="backgroundTint">?colorSurfaceContainerHigh</item>
+        <item name="contentInsetStart">@dimen/m3_searchbar_text_margin_start_no_navigation_icon</item>
+        <item name="defaultMarginsEnabled">true</item>
+        <item name="defaultScrollFlagsEnabled">true</item>
+        <item name="elevation">@dimen/m3_searchbar_elevation</item>
+        <item name="enforceMaterialTheme">true</item>
+        <item name="hideNavigationIcon">false</item>
+        <item name="liftOnScroll">false</item>
+        <item name="liftOnScrollColor">?colorSurfaceContainerHighest</item>
+        <item name="materialThemeOverlay">@style/ThemeOverlay.Material3.Search</item>
+        <item name="maxButtonHeight">@dimen/m3_searchbar_height</item>
+        <item name="shapeAppearance">?shapeAppearanceMediumComponent</item>
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.Material3.SearchBar</item>
+    </style>
+</resources>

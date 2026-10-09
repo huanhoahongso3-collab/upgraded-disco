@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="bottomsheet_action_collapse">Contraer</string>
+    <string name="bottomsheet_action_expand">Expandir</string>
+    <string name="bottomsheet_action_expand_halfway">Expandir hasta la mitad</string>
+    <string name="error_a11y_label">Error: No válido</string>
+    <string name="mtrl_button_overflow_icon_content_description">Menú ampliado</string>
+    <string name="searchview_clear_text_content_description">Borrar texto</string>
+    <string name="searchview_navigation_content_description">Atrás</string>
+    <string name="side_sheet_accessibility_pane_title">Hoja lateral</string>
+</resources>
