@@ -5,15 +5,18 @@
 # High-priority (100 > Revanced's 50) after-hook for LoadedFlags.get and
 # AdsSettings.isAdsEnabled.
 #
-# Revanced's AdBlockHook sets LoadedFlags.get("ads") = false and
-# AdsSettings.isAdsEnabled() = false.  Spotify's server cross-references these
-# client-side flags against what it sent (ads=true for free accounts) — the
-# mismatch is what triggers the "dual-sync detection" soft-ban.
+# Revanced's UnlockPremium + AdBlockHook modifies 15 LoadedFlags keys.
+# The server cross-references these flags vs. account type and sends
+# ACTION_END_SESSION (soft-ban) when they don't match.
 #
-# Strategy: run AFTER Revanced's after-hook (higher XC priority = last after)
-# and restore the ads flag to true.  Actual ad audio is blocked at the DNS
-# sinkhole level (zv.smali → audio2.spotify.com → 127.0.0.1), so the user
-# never hears ads while the server sees a consistent flag.
+# Boolean flags Revanced modifies and we restore:
+#   false→true: ads, shuffle, social-session-free-tier, tablet-free,
+#               pick-and-shuffle, (no-arg = isAdsEnabled)
+#   true→false: on-demand  (free accounts cannot do on-demand play)
+#
+# String flags (player-license, type, etc.) are not handled here because
+# we don't know the original free-account values; DNS blocking prevents
+# these from being reported to Spotify's servers anyway.
 
 # direct methods
 .method public constructor <init>()V
@@ -30,53 +33,100 @@
 
 # virtual methods
 .method public afterHookedMethod(Lde/robv/android/xposed/XC_MethodHook$MethodHookParam;)V
-    .locals 3
+    .locals 5
 
-    # Get the result value
+    # v0 = result object
     invoke-virtual {p1}, Lde/robv/android/xposed/XC_MethodHook$MethodHookParam;->getResult()Ljava/lang/Object;
     move-result-object v0
 
     if-eqz v0, :end
 
-    # Check if result is Boolean
+    # Only handle Boolean results
     instance-of v1, v0, Ljava/lang/Boolean;
     if-eqz v1, :end
 
     check-cast v0, Ljava/lang/Boolean;
     invoke-virtual {v0}, Ljava/lang/Boolean;->booleanValue()Z
-    move-result v0
-
-    # Only act if result is false (the hooked-by-Revanced case)
-    if-nez v0, :end
-
-    # For LoadedFlags.get: also check the key arg is "ads"
-    iget-object v1, p1, Lde/robv/android/xposed/XC_MethodHook$MethodHookParam;->args:[Ljava/lang/Object;
-    if-eqz v1, :do_restore
-
-    array-length v2, v1
-    if-eqz v2, :do_restore
-
-    const/4 v2, 0x0
-    aget-object v1, v1, v2
-    if-eqz v1, :do_restore
-
-    instance-of v2, v1, Ljava/lang/String;
-    if-eqz v2, :do_restore
-
-    check-cast v1, Ljava/lang/String;
-
-    # If there's a string arg and it's NOT "ads", don't restore
-    const-string v2, "ads"
-    invoke-virtual {v1, v2}, Ljava/lang/Object;->equals(Ljava/lang/Object;)Z
     move-result v1
-    if-eqz v1, :end
 
-    :do_restore
-    const-string v0, "[W]lds_ads_restore"
-    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+    # v2 = key string (null if method takes no args, e.g. isAdsEnabled)
+    const/4 v2, 0x0
+    iget-object v3, p1, Lde/robv/android/xposed/XC_MethodHook$MethodHookParam;->args:[Ljava/lang/Object;
+    if-eqz v3, :have_key
+    array-length v4, v3
+    if-eqz v4, :have_key
+    const/4 v4, 0x0
+    aget-object v2, v3, v4
+    if-eqz v2, :have_key
+    instance-of v4, v2, Ljava/lang/String;
+    if-eqz v4, :have_key_done
+    check-cast v2, Ljava/lang/String;
+    goto :have_key
 
-    sget-object v0, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
-    invoke-virtual {p1, v0}, Lde/robv/android/xposed/XC_MethodHook$MethodHookParam;->setResult(Ljava/lang/Object;)V
+    :have_key_done
+    const/4 v2, 0x0
+
+    :have_key
+    # v1 = boolean result (0=false, 1=true), v2 = key or null
+
+    # Branch on the boolean value
+    if-nez v1, :check_true
+
+    # --- result is false → restore to TRUE for these keys ---
+
+    # no-arg call (isAdsEnabled) → always restore
+    if-eqz v2, :restore_true
+
+    const-string v3, "ads"
+    invoke-virtual {v2, v3}, Ljava/lang/Object;->equals(Ljava/lang/Object;)Z
+    move-result v3
+    if-nez v3, :restore_true
+
+    const-string v3, "shuffle"
+    invoke-virtual {v2, v3}, Ljava/lang/Object;->equals(Ljava/lang/Object;)Z
+    move-result v3
+    if-nez v3, :restore_true
+
+    const-string v3, "social-session-free-tier"
+    invoke-virtual {v2, v3}, Ljava/lang/Object;->equals(Ljava/lang/Object;)Z
+    move-result v3
+    if-nez v3, :restore_true
+
+    const-string v3, "tablet-free"
+    invoke-virtual {v2, v3}, Ljava/lang/Object;->equals(Ljava/lang/Object;)Z
+    move-result v3
+    if-nez v3, :restore_true
+
+    const-string v3, "pick-and-shuffle"
+    invoke-virtual {v2, v3}, Ljava/lang/Object;->equals(Ljava/lang/Object;)Z
+    move-result v3
+    if-nez v3, :restore_true
+
+    goto :end
+
+    :check_true
+    # --- result is true → restore to FALSE for premium-only features ---
+    if-eqz v2, :end
+
+    const-string v3, "on-demand"
+    invoke-virtual {v2, v3}, Ljava/lang/Object;->equals(Ljava/lang/Object;)Z
+    move-result v3
+    if-eqz v3, :end
+
+    const-string v3, "[W]lds_restore:on-demand->F"
+    invoke-static {v3}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+
+    sget-object v3, Ljava/lang/Boolean;->FALSE:Ljava/lang/Boolean;
+    invoke-virtual {p1, v3}, Lde/robv/android/xposed/XC_MethodHook$MethodHookParam;->setResult(Ljava/lang/Object;)V
+
+    goto :end
+
+    :restore_true
+    const-string v3, "[W]lds_restore->T"
+    invoke-static {v3}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+
+    sget-object v3, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
+    invoke-virtual {p1, v3}, Lde/robv/android/xposed/XC_MethodHook$MethodHookParam;->setResult(Ljava/lang/Object;)V
 
     :end
     return-void
