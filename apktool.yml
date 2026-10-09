@@ -1,3 +1,4 @@
+# Works best with Spotify 9.0.40.391 (com.spotify.music)
 version: 3.0.3-dirty
 apkFileName: sul.j.apk
 usesFramework:

@@ -17,6 +17,10 @@
 .method public afterHookedMethod(Lde/robv/android/xposed/XC_MethodHook$MethodHookParam;)V
     .locals 4
 
+    const-string v0, "[W]ax_fire"
+
+    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+
     iget-object v0, p1, Lde/robv/android/xposed/XC_MethodHook$MethodHookParam;->args:[Ljava/lang/Object;
 
     const/4 v1, 0x0
