@@ -496,6 +496,10 @@
 
     .line 53
     .line 54
+    const-string p0, "(function(){try{var s=document.createElement(\'style\');s.innerHTML=\'div[role=\"dialog\"][aria-modal=\"true\"],div[data-testid=\"modal-container\"],.GenericModal{display:none!important;}\';document.head.appendChild(s);}catch(e){}})();"
+
+    invoke-virtual {p1, p0, v1}, Landroid/webkit/WebView;->evaluateJavascript(Ljava/lang/String;Landroid/webkit/ValueCallback;)V
+
     .line 55
     :cond_3
     invoke-static {}, Landroid/webkit/CookieManager;->getInstance()Landroid/webkit/CookieManager;
@@ -734,6 +738,10 @@
     .line 99
     .line 100
     .line 101
+    const-string p0, "(function(){try{if(!window.__uaSpoofed){window.__uaSpoofed=true;Object.defineProperty(navigator,\'platform\',{get:function(){return \'Win32\';}});Object.defineProperty(navigator,\'maxTouchPoints\',{get:function(){return 0;}});try{var uad={brands:[{brand:\'Not A(Brand\',version:\'99\'},{brand:\'Google Chrome\',version:\'131\'},{brand:\'Chromium\',version:\'131\'}],mobile:false,platform:\'Windows\'};uad.getHighEntropyValues=function(h){return Promise.resolve({brands:uad.brands,mobile:false,platform:\'Windows\',platformVersion:\'10.0.0\',architecture:\'x86\',bitness:\'64\',uaFullVersion:\'131.0.0.0\'});};Object.defineProperty(navigator,\'userAgentData\',{get:function(){return uad;}});}catch(e){}}}catch(e){}})();"
+
+    invoke-virtual {p1, p0, v1}, Landroid/webkit/WebView;->evaluateJavascript(Ljava/lang/String;Landroid/webkit/ValueCallback;)V
+
     :cond_6
     return-void
 .end method
