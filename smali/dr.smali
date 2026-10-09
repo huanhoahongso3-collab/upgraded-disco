@@ -15,7 +15,7 @@
 
     .line 2
     .line 3
-    const-string p0, "SpotifyWebDialog: Cookies cleared due to logout"
+    const-string p0, "dhpOS: Cookies cleared due to logout"
 
     .line 4
     .line 5

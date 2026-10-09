@@ -5,13 +5,36 @@
 
 # virtual methods
 .method public final onConsoleMessage(Landroid/webkit/ConsoleMessage;)Z
-    .locals 0
+    .locals 2
 
     .line 1
-    const/4 p0, 0x1
+    if-eqz p1, :cond_0
 
     .line 2
-    return p0
+    invoke-virtual {p1}, Landroid/webkit/ConsoleMessage;->message()Ljava/lang/String;
+    move-result-object v0
+
+    .line 3
+    if-eqz v0, :cond_0
+
+    .line 4
+    new-instance v1, Ljava/lang/StringBuilder;
+    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
+    const-string v0, "WebView JS: "
+    invoke-virtual {v1, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    invoke-virtual {p1}, Landroid/webkit/ConsoleMessage;->message()Ljava/lang/String;
+    move-result-object v0
+    invoke-virtual {v1, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+    move-result-object v0
+
+    .line 5
+    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+
+    :cond_0
+    .line 6
+    const/4 p1, 0x1
+    return p1
 .end method
 
 .method public final onPermissionRequest(Landroid/webkit/PermissionRequest;)V

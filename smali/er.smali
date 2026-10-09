@@ -3,6 +3,9 @@
 .source "r8-map-id-b91a544ab087b3eb6c80df88b36eae10fab43b20bd201f3729a8742feab138ad"
 
 
+# static fields
+.field public static capturedToken:Ljava/lang/String;
+
 # instance fields
 .field public final a:Landroid/content/Context;
 
@@ -24,6 +27,26 @@
     return-void
 .end method
 
+
+
+.method public final getCapturedToken()Ljava/lang/String;
+    .locals 1
+    .annotation runtime Landroid/webkit/JavascriptInterface;
+    .end annotation
+
+    .line 1
+    sget-object v0, Lhr;->capturedToken:Ljava/lang/String;
+
+    .line 2
+    if-nez v0, :cond_0
+
+    .line 3
+    const-string v0, ""
+
+    .line 4
+    :cond_0
+    return-object v0
+.end method
 
 # virtual methods
 .method public final onIdFound(Ljava/lang/String;)V
@@ -89,7 +112,7 @@
     .line 28
     .line 29
     .line 30
-    const-string v0, "SpotifyWebConnect: Successfully saved Web Device ID: "
+    const-string v0, "dhpOS: Saved Web Device ID: "
 
     .line 31
     .line 32
@@ -175,7 +198,7 @@
 
     .line 2
     .line 3
-    const-string v1, "SpotifyWebDialog: WebApp.onSessionCaptured method not found, falling back to field injection: "
+    const-string v1, "dhpOS: Session fallback injection: "
 
     .line 4
     .line 5
@@ -183,7 +206,7 @@
 
     .line 6
     .line 7
-    const-string v3, "SpotifyWebConnect: Captured session - Username: "
+    const-string v3, "dhpOS: Captured session - Username: "
 
     .line 8
     .line 9
@@ -415,7 +438,7 @@
     .line 121
     .line 122
     .line 123
-    const-string v4, "SpotifyWebDialog: Successfully invoked WebApp.onSessionCaptured via reflection"
+    const-string v4, "dhpOS: Session injected via reflection"
 
     .line 124
     .line 125
@@ -540,7 +563,7 @@
     .line 184
     .line 185
     .line 186
-    const-string p0, "SpotifyWebDialog: Successfully pushed session to WebApp currentSession via reflection"
+    const-string p0, "dhpOS: Session pushed via reflection"
 
     .line 187
     .line 188
@@ -570,7 +593,7 @@
 
     .line 198
     .line 199
-    const-string p2, "SpotifyWebDialog: Failed to push session to WebApp: "
+    const-string p2, "dhpOS: Failed to push session: "
 
     .line 200
     .line 201

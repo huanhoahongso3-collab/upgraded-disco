@@ -249,7 +249,7 @@
     .line 97
     .line 98
     .line 99
-    const-string v0, "WebPlaybackHook: Initialized"
+    const-string v0, "dhpOS Sportify Web Revanced: Initialized"
 
     .line 100
     .line 101
@@ -301,7 +301,7 @@
 
     .line 122
     .line 123
-    const-string v2, "WebPlaybackHook: Initialization failed -> "
+    const-string v2, "dhpOS Sportify Web Revanced: Init failed -> "
 
     .line 124
     .line 125

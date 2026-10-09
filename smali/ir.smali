@@ -916,7 +916,7 @@
     .line 346
     .line 347
     .line 348
-    const-string p0, "SpotifyWebDialog: Restored cookies on startup, loading open.spotify.com directly"
+    const-string p0, "dhpOS: Restored cookies, loading open.spotify.com..."
 
     .line 349
     .line 350
@@ -938,7 +938,7 @@
 
     .line 359
     :cond_4
-    const-string p0, "SpotifyWebDialog: No saved cookies found, loading accounts.spotify.com/login"
+    const-string p0, "dhpOS: No saved cookies, loading login..."
 
     .line 360
     .line 361

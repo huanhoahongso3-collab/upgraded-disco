@@ -604,7 +604,7 @@
     .line 269
     .line 270
     .line 271
-    const-string v0, "WebPlaybackHook: Spoofed URL ID -> "
+    const-string v0, "dhpOS: Spoofed URL ID -> "
 
     .line 272
     .line 273
@@ -793,7 +793,7 @@
     .line 363
     .line 364
     .line 365
-    const-string p1, "WebPlaybackHook: Spoof active for: "
+    const-string p1, "dhpOS: Spoof active for: "
 
     .line 366
     .line 367
@@ -841,7 +841,7 @@
 
     .line 387
     .line 388
-    const-string v0, "WebPlaybackHook: Failed to modify headers: "
+    const-string v0, "dhpOS: Failed to modify headers: "
 
     .line 389
     .line 390

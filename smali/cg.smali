@@ -267,7 +267,7 @@
     .line 99
     .line 100
     :cond_0
-    const-string v4, "ReVanced Xposed FE is initializing, please wait..."
+    const-string v4, "dhpOS Sportify Web Revanced is initializing, please wait..."
 
     .line 101
     .line 102
@@ -849,7 +849,7 @@
     .line 379
     .line 380
     .line 381
-    const-string p0, "WebPlaybackHook: Modulo attivato"
+    const-string p0, "dhpOS: Activated"
 
     .line 382
     .line 383
@@ -879,7 +879,7 @@
 
     .line 393
     .line 394
-    const-string v3, "WebPlaybackHook fallito: "
+    const-string v3, "dhpOS: Failed: "
 
     .line 395
     .line 396
@@ -1001,7 +1001,7 @@
     .line 454
     :cond_8
     :goto_b
-    const-string p0, "ReVanced Xposed FE module does not work with patched app"
+    const-string p0, "dhpOS Sportify Web Revanced module does not work with patched app"
 
     .line 455
     .line 456

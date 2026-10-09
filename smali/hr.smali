@@ -2,6 +2,9 @@
 .super Landroid/webkit/WebViewClient;
 .source "r8-map-id-b91a544ab087b3eb6c80df88b36eae10fab43b20bd201f3729a8742feab138ad"
 
+# static fields
+.field public static capturedToken:Ljava/lang/String;
+
 
 # instance fields
 .field public final a:[Ljava/lang/String;
@@ -729,7 +732,7 @@
 
     .line 95
     .line 96
-    const-string p0, "(function(){if(window.__morpheSessionHooked)return;window.__morpheSessionHooked=true;window.__morpheAccessToken=\'\';window.__morpheUsername=\'\';window.__morpheSent=false;window.__morpheDeviceId=\'\';window.__morpheApiId=\'\';window.__morpheKA=null;function trySend(){if(window.__morpheSent)return;if(window.__morpheAccessToken&&window.__morpheUsername){window.__morpheSent=true;androidBridge.onSessionFound(window.__morpheUsername,window.__morpheAccessToken);}}function doXfer(id,play){var tok=window.__morpheAccessToken;if(!tok||!id)return;fetch(\'https://api.spotify.com/v1/me/player\',{method:\'PUT\',headers:{\'Authorization\':\'Bearer \'+tok,\'Content-Type\':\'application/json\'},body:JSON.stringify({device_ids:[id],play:!!play})}).catch(function(){});}function startKA(){if(window.__morpheKA)clearInterval(window.__morpheKA);window.__morpheKA=setInterval(function(){var tok=window.__morpheAccessToken;var aid=window.__morpheApiId;if(!tok||!aid)return;fetch(\'https://api.spotify.com/v1/me/player\',{headers:{\'Authorization\':\'Bearer \'+tok}}).then(function(r){return r.status===200?r.json():null;}).then(function(s){if(!s||!s.device)return;if(s.device.id!==aid)doXfer(aid,s.is_playing);}).catch(function(){});},8000);}function lookup(n){var tok=window.__morpheAccessToken;if(!tok)return;fetch(\'https://api.spotify.com/v1/me/player/devices\',{headers:{\'Authorization\':\'Bearer \'+tok}}).then(function(r){return r.json();}).then(function(d){if(!d||!d.devices||!d.devices.length){if(n>0)setTimeout(function(){lookup(n-1);},3000);return;}var f=null;for(var i=0;i<d.devices.length;i++){if(d.devices[i].name===\'Web Player\'){f=d.devices[i];break;}}if(!f)for(var j=0;j<d.devices.length;j++){if(d.devices[j].type===\'Computer\'&&!d.devices[j].is_restricted){f=d.devices[j];break;}}if(f){window.__morpheApiId=f.id;fetch(\'https://api.spotify.com/v1/me/player\',{headers:{\'Authorization\':\'Bearer \'+tok}}).then(function(r){return r.status===200?r.json():null;}).then(function(s){doXfer(window.__morpheApiId,s&&s.is_playing);startKA();}).catch(function(){doXfer(window.__morpheApiId,false);startKA();});}else if(n>0)setTimeout(function(){lookup(n-1);},3000);}).catch(function(){if(n>0)setTimeout(function(){lookup(n-1);},3000);});}function captureDev(url,hdrs){if(typeof url===\'string\'&&url.indexOf(\'/connect-state/v1/devices/hobs_\')!==-1){var i=url.indexOf(\'/hobs_\')+1;var pt=url.substring(i);var qi=pt.indexOf(\'?\');var si=pt.indexOf(\'/\');var ei=qi===-1&&si===-1?pt.length:qi===-1?si:si===-1?qi:qi<si?qi:si;var did=pt.substring(0,ei);if(did&&!window.__morpheDeviceId){window.__morpheDeviceId=did;if(hdrs){var au=typeof hdrs.get===\'function\'?hdrs.get(\'Authorization\'):(hdrs[\'Authorization\']||hdrs[\'authorization\']);if(au&&au.indexOf(\'Bearer \')===0){window.__morpheAccessToken=au.substring(7);trySend();}}setTimeout(function(){lookup(5);},3000);}}}var OWS=window.WebSocket;window.WebSocket=function(url,protocols){var ws=protocols?new OWS(url,protocols):new OWS(url);try{if(typeof url===\'string\'&&url.indexOf(\'dealer\')!==-1&&url.indexOf(\'access_token=\')!==-1){var t=new URL(url).searchParams.get(\'access_token\');if(t){window.__morpheAccessToken=t;trySend();setTimeout(function(){if(!window.__morpheApiId)lookup(5);},6000);}}}catch(e){}return ws;};window.WebSocket.prototype=OWS.prototype;window.WebSocket.CONNECTING=OWS.CONNECTING;window.WebSocket.OPEN=OWS.OPEN;window.WebSocket.CLOSING=OWS.CLOSING;window.WebSocket.CLOSED=OWS.CLOSED;var oF=window.fetch;window.fetch=function(){var a=arguments;var u=(a[0]&&typeof a[0]===\'object\')?a[0].url:a[0];if(typeof u===\'string\'){if(u.indexOf(\'/playlist/v2/user/\')!==-1){var i1=u.indexOf(\'/playlist/v2/user/\')+18;var e1=u.indexOf(\'/\',i1);var un=e1===-1?u.substring(i1):u.substring(i1,e1);if(un){window.__morpheUsername=un;trySend();}}captureDev(u,a[1]&&a[1].headers);}return oF.apply(this,a);};var oX=XMLHttpRequest.prototype.open;XMLHttpRequest.prototype.open=function(m,url){captureDev(url,null);return oX.apply(this,arguments);};})();"
+        const-string p0, "(function(){if(!window.chrome)window.chrome={app:{isInstalled:false},runtime:{}};if(window.__morpheSessionHooked)return;window.__morpheSessionHooked=true;window.__morpheAccessToken=\'\';window.__morpheUsername=\'\';window.__morpheSent=false;window.__morpheApiId=\'\';window.__morpheKA=null;var DBG=function(m){try{androidBridge.onIdNotFound(\'[W]\'+m);}catch(e){}};DBG(\'init\');function gotToken(t){if(window.__morpheAccessToken)return;if(!t||typeof t!=\'string\')return;window.__morpheAccessToken=t;DBG(\'tok:\'+t.substring(0,16));trySend();setTimeout(function(){if(!window.__morpheApiId)lookup(10);},2000);}function trySend(){if(window.__morpheSent)return;if(window.__morpheAccessToken&&window.__morpheUsername){window.__morpheSent=true;DBG(\'sess:\'+window.__morpheUsername);androidBridge.onSessionFound(window.__morpheUsername,window.__morpheAccessToken);}}function doXfer(id,play){var tok=window.__morpheAccessToken;if(!tok||!id)return;DBG(\'xfer->\'+id);fetch(\'https://api.spotify.com/v1/me/player\',{method:\'PUT\',headers:{\'Authorization\':\'Bearer \'+tok,\'Content-Type\':\'application/json\',\'Origin\':\'https://open.spotify.com\',\'Referer\':\'https://open.spotify.com/\'},body:JSON.stringify({device_ids:[id],play:!!play})}).then(function(r){DBG(\'xfer:\'+r.status);}).catch(function(e){DBG(\'xferE:\'+e);});}function startKA(){if(window.__morpheKA)clearInterval(window.__morpheKA);window.__morpheKA=setInterval(function(){var tok=window.__morpheAccessToken;var aid=window.__morpheApiId;if(!tok||!aid)return;fetch(\'https://api.spotify.com/v1/me/player\',{headers:{\'Authorization\':\'Bearer \'+tok,\'Origin\':\'https://open.spotify.com\',\'Referer\':\'https://open.spotify.com/\'}}).then(function(r){return r.status===200?r.json():null;}).then(function(s){if(!s||!s.device)return;if(s.device.id!==aid){DBG(\'KA:drift\');doXfer(aid,s.is_playing);}}).catch(function(){});},8000);}function lookup(n){var tok=window.__morpheAccessToken;if(!tok){DBG(\'lookup:noTok\');return;}DBG(\'lookup:n=\'+n);fetch(\'https://api.spotify.com/v1/me/player/devices\',{headers:{\'Authorization\':\'Bearer \'+tok,\'Origin\':\'https://open.spotify.com\',\'Referer\':\'https://open.spotify.com/\'}}).then(function(r){return r.json();}).then(function(d){var devs=d&&d.devices;DBG(\'devs:\'+(devs?devs.length:0));if(!devs||!devs.length){if(n>0)setTimeout(function(){lookup(n-1);},3000);return;}var f=null;for(var i=0;i<devs.length;i++){DBG(\'d[\'+i+\']=\'+devs[i].name+\'/\'+devs[i].type);}for(var i=0;i<devs.length;i++){if(devs[i].name===\'Web Player\'){f=devs[i];break;}}if(!f)for(var j=0;j<devs.length;j++){if(devs[j].type===\'Computer\'&&!devs[j].is_restricted){f=devs[j];break;}}if(f){DBG(\'found:\'+f.name);window.__morpheApiId=f.id;fetch(\'https://api.spotify.com/v1/me/player\',{headers:{\'Authorization\':\'Bearer \'+tok,\'Origin\':\'https://open.spotify.com\',\'Referer\':\'https://open.spotify.com/\'}}).then(function(r){return r.status===200?r.json():null;}).then(function(s){doXfer(window.__morpheApiId,s&&s.is_playing);startKA();}).catch(function(){doXfer(window.__morpheApiId,false);startKA();});}else{DBG(\'noWebDev,n:\'+n);if(n>0)setTimeout(function(){lookup(n-1);},3000);}}).catch(function(e){DBG(\'lookupE:\'+e);if(n>0)setTimeout(function(){lookup(n-1);},3000);});}window.__morpheGotToken=gotToken;var jTok=androidBridge.getCapturedToken();if(jTok&&jTok.length>10)gotToken(jTok);var tokPoll=setInterval(function(){if(window.__morpheAccessToken){clearInterval(tokPoll);return;}var jt=androidBridge.getCapturedToken();if(jt&&jt.length>10){clearInterval(tokPoll);gotToken(jt);}},2000);var OWS=window.WebSocket;window.WebSocket=function(url,protocols){var ws=protocols?new OWS(url,protocols):new OWS(url);try{if(typeof url===\'string\'&&url.indexOf(\'dealer\')!==-1&&url.indexOf(\'access_token=\')!==-1){var t=new URL(url).searchParams.get(\'access_token\');if(t){DBG(\'ws_tok\');gotToken(t);}}}catch(e){DBG(\'ws_err:\'+e);}return ws;};window.WebSocket.prototype=OWS.prototype;window.WebSocket.CONNECTING=OWS.CONNECTING;window.WebSocket.OPEN=OWS.OPEN;window.WebSocket.CLOSING=OWS.CLOSING;window.WebSocket.CLOSED=OWS.CLOSED;var oF=window.fetch;window.fetch=function(){var a=arguments;var u=(a[0]&&typeof a[0]===\'object\')?a[0].url:a[0];if(typeof u===\'string\'){if(u.indexOf(\'/playlist/v2/user/\')!==-1){var i1=u.indexOf(\'/playlist/v2/user/\')+18;var e1=u.indexOf(\'/\',i1);var un=e1===-1?u.substring(i1):u.substring(i1,e1);if(un){window.__morpheUsername=un;trySend();}}if(!window.__morpheAccessToken&&u.indexOf(\'api.spotify.com\')!==-1){var hdrs=a[1]&&a[1].headers;if(hdrs){var au=typeof hdrs.get===\'function\'?hdrs.get(\'Authorization\'):(hdrs[\'Authorization\']||hdrs[\'authorization\']);if(au&&au.indexOf(\'Bearer \')===0)gotToken(au.substring(7));}}}return oF.apply(this,a);};var oSRH=XMLHttpRequest.prototype.setRequestHeader;XMLHttpRequest.prototype.setRequestHeader=function(name,val){if(!window.__morpheAccessToken&&typeof name===\'string\'&&name.toLowerCase()===\'authorization\'&&val&&val.indexOf(\'Bearer \')===0)gotToken(val.substring(7));return oSRH.apply(this,arguments);};DBG(\'hooks_done\');})();"
 
     .line 97
     .line 98
@@ -747,7 +750,7 @@
 .end method
 
 .method public final shouldInterceptRequest(Landroid/webkit/WebView;Landroid/webkit/WebResourceRequest;)Landroid/webkit/WebResourceResponse;
-    .locals 7
+    .locals 9
 
     .line 1
     if-eqz p2, :cond_e
@@ -1159,7 +1162,7 @@
     move-result-object v1
 
     .line 204
-    const-string v4, "SpotifyWebConnect: Captured Device ID: "
+    const-string v4, "dhpOS: Captured Device ID: "
 
     .line 205
     .line 206
@@ -1172,6 +1175,63 @@
 
     .line 210
     invoke-static {v4}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+
+    .line 211
+    invoke-interface {p2}, Landroid/webkit/WebResourceRequest;->getRequestHeaders()Ljava/util/Map;
+
+    .line 212
+    move-result-object v7
+
+    .line 213
+    if-eqz v7, :skip_auth_hdr
+
+    .line 214
+    const-string v8, "Authorization"
+
+    .line 215
+    invoke-interface {v7, v8}, Ljava/util/Map;->get(Ljava/lang/Object;)Ljava/lang/Object;
+
+    .line 216
+    move-result-object v7
+
+    .line 217
+    if-eqz v7, :skip_auth_hdr
+
+    .line 218
+    check-cast v7, Ljava/lang/String;
+
+    .line 219
+    const-string v8, "Bearer "
+
+    .line 220
+    invoke-virtual {v7, v8}, Ljava/lang/String;->startsWith(Ljava/lang/String;)Z
+
+    .line 221
+    move-result v8
+
+    .line 222
+    if-eqz v8, :skip_auth_hdr
+
+    .line 223
+    const/4 v8, 0x7
+
+    .line 224
+    invoke-virtual {v7, v8}, Ljava/lang/String;->substring(I)Ljava/lang/String;
+
+    .line 225
+    move-result-object v7
+
+    .line 226
+    sput-object v7, Lhr;->capturedToken:Ljava/lang/String;
+
+    .line 227
+    const-string v7, "dhpOS: Captured Token from Java header"
+
+    .line 228
+    invoke-static {v7}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+
+    .line 229
+    :skip_auth_hdr
 
     .line 211
     .line 212

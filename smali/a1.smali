@@ -688,7 +688,7 @@
 
     .line 193
     .line 194
-    const-string p0, "SpotifyWebDialog: Destroying WebView and stopping playback"
+    const-string p0, "dhpOS: Destroying WebView"
 
     .line 195
     .line 196

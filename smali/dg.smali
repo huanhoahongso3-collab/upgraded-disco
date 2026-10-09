@@ -394,7 +394,7 @@
 
     .line 181
     .line 182
-    const-string v15, "Revanced Xposed FE Settings"
+    const-string v15, "dhpOS Sportify Web Revanced Settings"
 
     .line 183
     .line 184
