@@ -758,6 +758,20 @@
     .line 374
     invoke-virtual {v13, v4}, Landroid/view/ViewGroup;->addView(Landroid/view/View;)V
 
+    const-string v6, "auto_redirect_audio"
+
+    const/4 v8, 0x0
+
+    const-string v4, "Auto Redirect to Web Player"
+
+    const-string v5, "Auto-navigate WebView to playing track (default off)"
+
+    invoke-static/range {v3 .. v8}, Lzf;->f(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Landroid/content/SharedPreferences;Z)Landroid/widget/LinearLayout;
+
+    move-result-object v4
+
+    invoke-virtual {v13, v4}, Landroid/view/ViewGroup;->addView(Landroid/view/View;)V
+
     .line 375
     .line 376
     .line 377
