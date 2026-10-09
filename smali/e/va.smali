@@ -567,35 +567,6 @@
     :try_end_ms
     .catchall {:try_start_ms .. :try_end_ms} :catchall_ms
 
-    :try_start_sg
-    const-string v0, "[W]sg_reg_start"
-
-    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
-
-    const-string v0, "android.app.ContextImpl"
-
-    const/4 v1, 0x0
-
-    new-instance v2, Lzw;
-
-    invoke-direct {v2}, Lzw;-><init>()V
-
-    const-class v3, Landroid/content/Intent;
-
-    filled-new-array {v3, v2}, [Ljava/lang/Object;
-
-    move-result-object v2
-
-    const-string v3, "sendBroadcast"
-
-    invoke-static {v0, v1, v3, v2}, Lde/robv/android/xposed/XposedHelpers;->findAndHookMethod(Ljava/lang/String;Ljava/lang/ClassLoader;Ljava/lang/String;[Ljava/lang/Object;)Lde/robv/android/xposed/XC_MethodHook$Unhook;
-
-    const-string v0, "[W]sg_reg_ok"
-
-    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
-    :try_end_sg
-    .catchall {:try_start_sg .. :try_end_sg} :catchall_sg
-
     :try_start_lp
     const-string v0, "[W]lp_reg_start"
 
@@ -625,6 +596,78 @@
     :try_end_lp
     .catchall {:try_start_lp .. :try_end_lp} :catchall_lp
 
+    :try_start_dns
+    const-string v0, "[W]dns_reg_start"
+
+    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+
+    const-string v0, "java.net.InetAddress"
+
+    const/4 v1, 0x0
+
+    new-instance v2, Lzz;
+
+    invoke-direct {v2}, Lzz;-><init>()V
+
+    const-class v3, Ljava/lang/String;
+
+    filled-new-array {v3, v2}, [Ljava/lang/Object;
+
+    move-result-object v2
+
+    const-string v3, "getAllByName"
+
+    invoke-static {v0, v1, v3, v2}, Lde/robv/android/xposed/XposedHelpers;->findAndHookMethod(Ljava/lang/String;Ljava/lang/ClassLoader;Ljava/lang/String;[Ljava/lang/Object;)Lde/robv/android/xposed/XC_MethodHook$Unhook;
+
+    const-string v0, "[W]dns_reg_ok"
+
+    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+    :try_end_dns
+    .catchall {:try_start_dns .. :try_end_dns} :catchall_dns
+
+    :try_start_lf
+    const-string v0, "[W]lf_reg_start"
+
+    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+
+    iget-object v0, p1, Lde/robv/android/xposed/callbacks/XC_LoadPackage$LoadPackageParam;->classLoader:Ljava/lang/ClassLoader;
+
+    const-string v1, "com.spotify.connectivity.flags.LoadedFlags"
+
+    invoke-virtual {v0, v1}, Ljava/lang/ClassLoader;->loadClass(Ljava/lang/String;)Ljava/lang/Class;
+
+    move-result-object v0
+
+    const-string v1, "get"
+
+    new-instance v2, Lzy;
+
+    invoke-direct {v2}, Lzy;-><init>()V
+
+    invoke-static {v0, v1, v2}, Lde/robv/android/xposed/XposedBridge;->hookAllMethods(Ljava/lang/Class;Ljava/lang/String;Lde/robv/android/xposed/XC_MethodHook;)Ljava/util/Set;
+
+    iget-object v0, p1, Lde/robv/android/xposed/callbacks/XC_LoadPackage$LoadPackageParam;->classLoader:Ljava/lang/ClassLoader;
+
+    const-string v1, "com.spotify.adsinternal.adscore.AdsSettings"
+
+    invoke-virtual {v0, v1}, Ljava/lang/ClassLoader;->loadClass(Ljava/lang/String;)Ljava/lang/Class;
+
+    move-result-object v0
+
+    const-string v1, "isAdsEnabled"
+
+    new-instance v2, Lzy;
+
+    invoke-direct {v2}, Lzy;-><init>()V
+
+    invoke-static {v0, v1, v2}, Lde/robv/android/xposed/XposedBridge;->hookAllMethods(Ljava/lang/Class;Ljava/lang/String;Lde/robv/android/xposed/XC_MethodHook;)Ljava/util/Set;
+
+    const-string v0, "[W]lf_reg_ok"
+
+    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+    :try_end_lf
+    .catchall {:try_start_lf .. :try_end_lf} :catchall_lf
+
     return-void
 
     :catchall_lp
@@ -644,14 +687,14 @@
 
     return-void
 
-    :catchall_sg
+    :catchall_ms
     move-exception v0
 
     invoke-virtual {v0}, Ljava/lang/Throwable;->toString()Ljava/lang/String;
 
     move-result-object v0
 
-    const-string v1, "[W]sg_FAIL:"
+    const-string v1, "[W]ms_FAIL:"
 
     invoke-virtual {v1, v0}, Ljava/lang/String;->concat(Ljava/lang/String;)Ljava/lang/String;
 
@@ -661,14 +704,31 @@
 
     return-void
 
-    :catchall_ms
+    :catchall_dns
     move-exception v0
 
     invoke-virtual {v0}, Ljava/lang/Throwable;->toString()Ljava/lang/String;
 
     move-result-object v0
 
-    const-string v1, "[W]ms_FAIL:"
+    const-string v1, "[W]dns_FAIL:"
+
+    invoke-virtual {v1, v0}, Ljava/lang/String;->concat(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v0
+
+    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+
+    return-void
+
+    :catchall_lf
+    move-exception v0
+
+    invoke-virtual {v0}, Ljava/lang/Throwable;->toString()Ljava/lang/String;
+
+    move-result-object v0
+
+    const-string v1, "[W]lf_FAIL:"
 
     invoke-virtual {v1, v0}, Ljava/lang/String;->concat(Ljava/lang/String;)Ljava/lang/String;
 
