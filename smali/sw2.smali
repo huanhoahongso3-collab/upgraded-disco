@@ -136,12 +136,33 @@
 
     invoke-virtual {v6, v7}, Landroid/view/View;->getLocationOnScreen([I)V
 
-    # composeScreenY (v7[1]) + 572 (0x23C) = tapScreenY
+    # tapScreenY = composeScreenY + (int)(218dp * displayDensity)
+    # 218dp is the offset from compose_view top to Web Player row center
+    # (measured at 420dpi: 218 * 2.625 = 572px).  Scaling by density
+    # makes it correct on any phone density.
     const/4 v1, 0x1
 
     aget v1, v7, v1
 
-    const/16 v0, 0x23C
+    # Get displayMetrics.density from activity resources
+    sget-object v0, Ler;->activity:Landroid/app/Activity;
+
+    invoke-virtual {v0}, Landroid/app/Activity;->getResources()Landroid/content/res/Resources;
+
+    move-result-object v0
+
+    invoke-virtual {v0}, Landroid/content/res/Resources;->getDisplayMetrics()Landroid/util/DisplayMetrics;
+
+    move-result-object v0
+
+    iget v0, v0, Landroid/util/DisplayMetrics;->density:F
+
+    # 218.0f * density → int offset
+    const/high16 v2, 0x43590000
+
+    mul-float/2addr v0, v2
+
+    float-to-int v0, v0
 
     add-int v14, v1, v0
 
