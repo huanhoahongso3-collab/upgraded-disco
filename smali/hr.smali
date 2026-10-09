@@ -1207,6 +1207,10 @@
     invoke-interface {v4, v5, v1}, Landroid/content/SharedPreferences$Editor;->putString(Ljava/lang/String;Ljava/lang/String;)Landroid/content/SharedPreferences$Editor;
 
     .line 228
+    const-string v5, "enable_web_playback"
+    const/4 v6, 0x1
+    invoke-interface {v4, v5, v6}, Landroid/content/SharedPreferences$Editor;->putBoolean(Ljava/lang/String;Z)Landroid/content/SharedPreferences$Editor;
+
     .line 229
     .line 230
     invoke-interface {v4}, Landroid/content/SharedPreferences$Editor;->commit()Z
