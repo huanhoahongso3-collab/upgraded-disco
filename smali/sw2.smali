@@ -136,20 +136,71 @@
 
     invoke-virtual {v6, v7}, Landroid/view/View;->getLocationOnScreen([I)V
 
-    # tapY = dialog root height - (int)(549dp * density)
-    # Web Player is always the last Connect device; 549dp is its fixed distance
-    # from screen bottom (measured on 1080x2400 @ 420dpi, density-scaled to any device).
-    # Using the dialog root (v5) height avoids relying on compose_view's layout height,
-    # which can be larger than the visible area.
-    const/4 v1, 0x1
+    # tapY: use Compose AccessibilityNodeProvider to find "Web Player" row by text.
+    # Works correctly with any number of Connect devices in the list.
+    # Falls back to v5.height - 510dp*density if the provider is unavailable.
+    invoke-virtual {v6}, Landroid/view/View;->getAccessibilityNodeProvider()Landroid/view/accessibility/AccessibilityNodeProvider;
 
-    aget v1, v7, v1
+    move-result-object v0
+
+    if-eqz v0, :tap_fallback
+
+    const/4 v1, -0x1
+
+    invoke-virtual {v0, v1}, Landroid/view/accessibility/AccessibilityNodeProvider;->createAccessibilityNodeInfo(I)Landroid/view/accessibility/AccessibilityNodeInfo;
+
+    move-result-object v0
+
+    if-eqz v0, :tap_fallback
+
+    const-string v1, "Web Player"
+
+    invoke-virtual {v0, v1}, Landroid/view/accessibility/AccessibilityNodeInfo;->findAccessibilityNodeInfosByText(Ljava/lang/String;)Ljava/util/List;
+
+    move-result-object v0
+
+    if-eqz v0, :tap_fallback
+
+    invoke-interface {v0}, Ljava/util/List;->isEmpty()Z
+
+    move-result v1
+
+    if-nez v1, :tap_fallback
+
+    const/4 v1, 0x0
+
+    invoke-interface {v0, v1}, Ljava/util/List;->get(I)Ljava/lang/Object;
+
+    move-result-object v0
+
+    check-cast v0, Landroid/view/accessibility/AccessibilityNodeInfo;
+
+    new-instance v1, Landroid/graphics/Rect;
+
+    invoke-direct {v1}, Landroid/graphics/Rect;-><init>()V
+
+    invoke-virtual {v0, v1}, Landroid/view/accessibility/AccessibilityNodeInfo;->getBoundsInScreen(Landroid/graphics/Rect;)V
+
+    invoke-virtual {v1}, Landroid/graphics/Rect;->centerY()I
+
+    move-result v14
+
+    const-string v0, "[W]swp:a11y_ok"
+
+    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+
+    goto :tap_got_y
+
+    :tap_fallback
+
+    const-string v0, "[W]swp:a11y_fallback"
+
+    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
 
     invoke-virtual {v5}, Landroid/view/View;->getHeight()I
 
     move-result v14
 
-    # Get displayMetrics.density from activity resources
     sget-object v0, Ler;->activity:Landroid/app/Activity;
 
     invoke-virtual {v0}, Landroid/app/Activity;->getResources()Landroid/content/res/Resources;
@@ -162,14 +213,16 @@
 
     iget v0, v0, Landroid/util/DisplayMetrics;->density:F
 
-    # 549.0f = 0x44094000; density-scaled offset from screen bottom to Web Player center
-    const v2, 0x44094000
+    # 510.0f = 0x43FF0000; dp from screen bottom to Web Player center (density-scaled)
+    const/high16 v2, 0x43FF0000
 
     mul-float/2addr v0, v2
 
     float-to-int v0, v0
 
     sub-int/2addr v14, v0
+
+    :tap_got_y
 
     # tapScreenX = composeScreenX (v7[0]) + composeWidth/2
     const/4 v0, 0x0
