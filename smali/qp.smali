@@ -367,18 +367,9 @@
     .catch Ljava/lang/Exception; {:try_start_2 .. :try_end_2} :catch_2
 
     .line 103
-    .line 104
-    .line 105
     :catch_2
-    invoke-static {}, Landroid/os/Process;->myPid()I
-    move-result p1
-    invoke-static {p1}, Landroid/os/Process;->killProcess(I)V
-    const/4 p1, 0x1
-    invoke-static {p1}, Ljava/lang/System;->exit(I)V
-    new-instance p1, Ljava/lang/SecurityException;
-    const-string v0, "Security check failed"
-    invoke-direct {p1, v0, p0}, Ljava/lang/SecurityException;-><init>(Ljava/lang/String;Ljava/lang/Throwable;)V
-    throw p1
+    const/4 p0, 0x0
+    return-object p0
 .end method
 
 .method public static b(Landroid/content/Context;)[B
