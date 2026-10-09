@@ -136,7 +136,7 @@
     move-result-object v2
 
     .line 20
-    const-string v3, "sul.j"
+    const-string v3, "dhp.tpl.spotify.webview"
 
     .line 21
     .line 22
