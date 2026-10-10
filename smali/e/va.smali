@@ -628,19 +628,19 @@
     .catchall {:try_start_dns .. :try_end_dns} :catchall_dns
 
     :try_start_lf
-    const-string v0, "[W]lf_reg_start"
+    const-string v0, "[W]a20_reg_start"
 
     invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
 
     move-object v0, v4
 
-    const-string v1, "com.spotify.connectivity.flags.LoadedFlags"
+    const-string v1, "a20"
 
     invoke-virtual {v0, v1}, Ljava/lang/ClassLoader;->loadClass(Ljava/lang/String;)Ljava/lang/Class;
 
     move-result-object v0
 
-    const-string v1, "get"
+    const-string v1, "a"
 
     new-instance v2, Lzy;
 
@@ -648,23 +648,7 @@
 
     invoke-static {v0, v1, v2}, Lde/robv/android/xposed/XposedBridge;->hookAllMethods(Ljava/lang/Class;Ljava/lang/String;Lde/robv/android/xposed/XC_MethodHook;)Ljava/util/Set;
 
-    move-object v0, v4
-
-    const-string v1, "com.spotify.adsinternal.adscore.AdsSettings"
-
-    invoke-virtual {v0, v1}, Ljava/lang/ClassLoader;->loadClass(Ljava/lang/String;)Ljava/lang/Class;
-
-    move-result-object v0
-
-    const-string v1, "isAdsEnabled"
-
-    new-instance v2, Lzy;
-
-    invoke-direct {v2}, Lzy;-><init>()V
-
-    invoke-static {v0, v1, v2}, Lde/robv/android/xposed/XposedBridge;->hookAllMethods(Ljava/lang/Class;Ljava/lang/String;Lde/robv/android/xposed/XC_MethodHook;)Ljava/util/Set;
-
-    const-string v0, "[W]lf_reg_ok"
+    const-string v0, "[W]a20_reg_ok"
 
     invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
     :try_end_lf
@@ -691,8 +675,9 @@
     :try_end_cf
     .catchall {:try_start_cf .. :try_end_cf} :catchall_cf
 
+    :start_zd
     new-instance v0, Lzd;
-    invoke-direct {v0}, Lzd;-><init>()V
+    invoke-direct {v0, v4}, Lzd;-><init>(Ljava/lang/ClassLoader;)V
     invoke-virtual {v0}, Ljava/lang/Thread;->start()V
 
     return-void
@@ -712,7 +697,7 @@
 
     invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
 
-    return-void
+    goto :start_zd
 
     :catchall_ms
     move-exception v0
@@ -729,7 +714,7 @@
 
     invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
 
-    return-void
+    goto :start_zd
 
     :catchall_dns
     move-exception v0
@@ -746,7 +731,7 @@
 
     invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
 
-    return-void
+    goto :start_zd
 
     :catchall_lf
     move-exception v0
@@ -763,7 +748,7 @@
 
     invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
 
-    return-void
+    goto :start_zd
 
     :catchall_cf
     move-exception v0
@@ -780,5 +765,5 @@
 
     invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
 
-    return-void
+    goto :start_zd
 .end method
