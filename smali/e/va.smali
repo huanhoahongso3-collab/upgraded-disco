@@ -352,10 +352,10 @@
     :cond_3
     iput-object p1, p0, Le/va;->a:Lde/robv/android/xposed/callbacks/XC_LoadPackage$LoadPackageParam;
 
-    # Read module prefs: v5=blockAds, v6=enablePremium (both default false)
+    # Read Spotify's own prefs (same file dhpOS popup writes to)
     new-instance v5, Lde/robv/android/xposed/XSharedPreferences;
-    const-string v6, "dhp.tpl.spotify.webview"
-    const-string v0, "module_prefs"
+    const-string v6, "com.spotify.music"
+    const-string v0, "spotify_prefs"
     invoke-direct {v5, v6, v0}, Lde/robv/android/xposed/XSharedPreferences;-><init>(Ljava/lang/String;Ljava/lang/String;)V
     invoke-virtual {v5}, Lde/robv/android/xposed/XSharedPreferences;->reload()V
 
@@ -364,7 +364,7 @@
     invoke-interface {v5, v6, v0}, Landroid/content/SharedPreferences;->getBoolean(Ljava/lang/String;Z)Z
     move-result v6
 
-    const-string v0, "block_ads"
+    const-string v0, "enable_adblock"
     const/4 v1, 0x0
     invoke-interface {v5, v0, v1}, Landroid/content/SharedPreferences;->getBoolean(Ljava/lang/String;Z)Z
     move-result v5

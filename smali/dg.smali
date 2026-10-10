@@ -564,7 +564,7 @@
 
     .line 275
     .line 276
-    const/4 v8, 0x1
+    const/4 v8, 0x0
 
     .line 277
     move-object/from16 v19, v4
@@ -633,6 +633,7 @@
     .line 309
     .line 310
     .line 311
+    const/4 v8, 0x1
     const-string v6, "enable_monet"
 
     .line 312
