@@ -287,7 +287,9 @@
 
     .line 13
     :cond_0
-    invoke-static {v1}, Landroid/webkit/WebView;->setWebContentsDebuggingEnabled(Z)V
+    const/4 v0, 0x0
+
+    invoke-static {v0}, Landroid/webkit/WebView;->setWebContentsDebuggingEnabled(Z)V
 
     .line 14
     .line 15
@@ -618,7 +620,7 @@
     .line 190
     .line 191
     .line 192
-    const-string v10, "androidBridge"
+    const-string v10, "__nc"
 
     .line 193
     .line 194
