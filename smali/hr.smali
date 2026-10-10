@@ -72,26 +72,15 @@
     .line 20
     .line 21
     .line 22
-    const-string v1, "/ads/"
+    # SpotiDuck audio ad URL patterns (mp3-ad paths)
+    const-string v1, "scdn.co/mp3-ad/"
 
-    .line 23
-    .line 24
     const-string v2, "/mp3-ad/"
 
-    .line 25
-    .line 26
-    const-string v3, "adstudio"
+    filled-new-array {v1, v2}, [Ljava/lang/String;
 
-    .line 27
-    .line 28
-    filled-new-array {v3, v1, v2}, [Ljava/lang/String;
-
-    .line 29
-    .line 30
-    .line 31
     move-result-object v1
 
-    .line 32
     iput-object v1, v0, Lhr;->a:[Ljava/lang/String;
 
     .line 33
@@ -168,158 +157,62 @@
 
     .line 69
     .line 70
-    const-string v26, "advertising"
+    # SpotiDuck ad domain list (method 2: Spotify-specific + method 3: generic)
+    const-string v2, "adsrvr.org"
 
-    .line 71
-    .line 72
-    const-string v27, "adserver"
+    const-string v3, "tracker.samplicio.us"
 
-    .line 73
-    .line 74
-    const-string v2, "google-analytics"
+    const-string v4, "t.6sc.co"
 
-    .line 75
-    .line 76
-    const-string v3, "googletagmanager"
+    const-string v5, "aet.spotify.com"
 
-    .line 77
-    .line 78
-    const-string v4, "doubleclick"
+    const-string v6, "ads.spotify.com"
 
-    .line 79
-    .line 80
-    const-string v5, "partnerad"
+    const-string v7, "adstudio.spotify.com"
 
-    .line 81
-    .line 82
-    const-string v6, "analytics"
+    const-string v8, "pixel.spotify.com"
 
-    .line 83
-    .line 84
-    const-string v7, "telemetry"
+    const-string v9, "pixel-static.spotify.com"
 
-    .line 85
-    .line 86
-    const-string v8, "sentry"
+    const-string v10, "adeventtracker.spotify.com"
 
-    .line 87
-    .line 88
-    const-string v9, "bugsnag"
+    const-string v11, "ads-fa.spotify.com"
 
-    .line 89
-    .line 90
-    const-string v10, "log-client"
+    const-string v12, "ads-akp.spotify.com"
 
-    .line 91
-    .line 92
-    const-string v11, "event-tracker"
+    const-string v13, "audio-ads.spotify.com"
 
-    .line 93
-    .line 94
-    const-string v12, "facebook.net"
+    const-string v14, "mp3ad.scdn.co"
 
-    .line 95
-    .line 96
-    const-string v13, "twitter.com"
+    const-string v15, "amillionads.com"
 
-    .line 97
-    .line 98
-    const-string v14, "crashlytics"
+    const-string v16, "adstudio-assets.scdn.co"
 
-    .line 99
-    .line 100
-    const-string v15, "amplitude"
+    const-string v17, "adxcel.com"
 
-    .line 101
-    .line 102
-    const-string v16, "optimizely"
+    const-string v18, "2mdn.net"
 
-    .line 103
-    .line 104
-    const-string v17, "ads-sdk"
+    const-string v19, "sentry.io"
 
-    .line 105
-    .line 106
-    const-string v18, "ad-logic"
+    const-string v20, "fastly-insights.com"
 
-    .line 107
-    .line 108
-    const-string v19, "ad-engine"
+    const-string v21, "googlesyndication.com"
 
-    .line 109
-    .line 110
-    const-string v20, "googleads"
+    const-string v22, "doubleclick.net"
 
-    .line 111
-    .line 112
-    const-string v21, "amazon-adsystem"
+    filled-new-array/range {v2 .. v22}, [Ljava/lang/String;
 
-    .line 113
-    .line 114
-    const-string v22, "adnxs"
-
-    .line 115
-    .line 116
-    const-string v23, "adsystem"
-
-    .line 117
-    .line 118
-    const-string v24, "pubads"
-
-    .line 119
-    .line 120
-    const-string v25, "securepubads"
-
-    .line 121
-    .line 122
-    filled-new-array/range {v2 .. v27}, [Ljava/lang/String;
-
-    .line 123
-    .line 124
-    .line 125
     move-result-object v1
 
-    .line 126
     iput-object v1, v0, Lhr;->d:[Ljava/lang/String;
 
     .line 127
     .line 128
-    const-string v7, "/error/"
+    # telemetry path list — emptied; SpotiDuck handles telemetry blocking
+    const/4 v1, 0x0
 
-    .line 129
-    .line 130
-    const-string v8, "/feedback/"
+    new-array v1, v1, [Ljava/lang/String;
 
-    .line 131
-    .line 132
-    const-string v2, "/event/"
-
-    .line 133
-    .line 134
-    const-string v3, "/events/"
-
-    .line 135
-    .line 136
-    const-string v4, "/log/"
-
-    .line 137
-    .line 138
-    const-string v5, "/stats/"
-
-    .line 139
-    .line 140
-    const-string v6, "/telemetry/"
-
-    .line 141
-    .line 142
-    filled-new-array/range {v2 .. v8}, [Ljava/lang/String;
-
-    .line 143
-    .line 144
-    .line 145
-    move-result-object v1
-
-    .line 146
     iput-object v1, v0, Lhr;->e:[Ljava/lang/String;
 
     .line 147
@@ -755,10 +648,6 @@
     if-eqz p0, :cond_sd2
     invoke-virtual {p1, p0, v1}, Landroid/webkit/WebView;->evaluateJavascript(Ljava/lang/String;Landroid/webkit/ValueCallback;)V
     :cond_sd2
-    # adMute — audio muting during ad slots (SpotiDuck CSS hides visuals)
-    const-string p0, "(function adMute(){try{var s=\'[data-testid=\"ad-label\"],[data-testid=\"advertisement\"],[aria-label=\"Advertisement\"],[data-testid*=\"sponsored\"]\';var isAd=!!document.querySelector(s);var a=document.querySelector(\'audio\');if(a){if(isAd){a.volume=0;a.muted=true;}else if(a.muted&&a.volume===0){a.muted=false;a.volume=1;}}}catch(e){}setTimeout(adMute,600);})();"
-    invoke-virtual {p1, p0, v1}, Landroid/webkit/WebView;->evaluateJavascript(Ljava/lang/String;Landroid/webkit/ValueCallback;)V
-
     # Wrap SpotiDuck fetch hook to auto-DELETE old hobs_ device on new registration.
     # SpotiDuck sets hidden=false so stale sessions appear as "Unavailable" in Connect.
     # This tracks the last-registered device ID in localStorage and sends a spclient
