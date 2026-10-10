@@ -137,9 +137,9 @@
     invoke-virtual {v6, v7}, Landroid/view/View;->getLocationOnScreen([I)V
 
     # tapScreenY = composeScreenY + (int)(218dp * displayDensity)
-    # 218dp is the offset from compose_view top to Web Player row center
-    # (measured at 420dpi: 218 * 2.625 = 572px).  Scaling by density
-    # makes it correct on any phone density.
+    # 290dp is the offset to the SECOND device row (the Web Player row when an
+    # "Unavailable" device occupies the first row above it).
+    # 290 = 218 (first row center) + 72 (one device-row height in dp).
     const/4 v1, 0x1
 
     aget v1, v7, v1
@@ -157,8 +157,8 @@
 
     iget v0, v0, Landroid/util/DisplayMetrics;->density:F
 
-    # 218.0f * density → int offset
-    const/high16 v2, 0x43590000
+    # 290.0f * density → int offset
+    const/high16 v2, 0x43910000
 
     mul-float/2addr v0, v2
 
