@@ -19,7 +19,21 @@
 
 # virtual methods
 .method public beforeHookedMethod(Lde/robv/android/xposed/XC_MethodHook$MethodHookParam;)V
-    .locals 5
+    .locals 7
+
+    # If enable_adblock is OFF, skip DNS blocking
+    invoke-static {}, Landroid/app/ActivityThread;->currentApplication()Landroid/app/Application;
+    move-result-object v5
+    if-eqz v5, :end
+    const-string v6, "spotify_prefs"
+    const/4 v0, 0x0
+    invoke-virtual {v5, v6, v0}, Landroid/content/Context;->getSharedPreferences(Ljava/lang/String;I)Landroid/content/SharedPreferences;
+    move-result-object v5
+    const-string v6, "enable_adblock"
+    const/4 v0, 0x0
+    invoke-interface {v5, v6, v0}, Landroid/content/SharedPreferences;->getBoolean(Ljava/lang/String;Z)Z
+    move-result v5
+    if-eqz v5, :end
 
     iget-object v0, p1, Lde/robv/android/xposed/XC_MethodHook$MethodHookParam;->args:[Ljava/lang/Object;
 

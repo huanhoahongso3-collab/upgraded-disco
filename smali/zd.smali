@@ -1,92 +1,89 @@
 .class public final Lzd;
-.super Landroid/util/Property;
+.super Ljava/lang/Thread;
 .source "r8-map-id-b91a544ab087b3eb6c80df88b36eae10fab43b20bd201f3729a8742feab138ad"
 
-
-# instance fields
-.field public final a:Landroid/graphics/Matrix;
-
+# Debug thread: sleeps 10s after module loads, then dumps spotify_prefs values
+# to Xposed log so you can confirm enable_premium / enable_adblock state.
+# Filter logcat: adb logcat -s "Xposed" | grep "\[D10s\]"
 
 # direct methods
 .method public constructor <init>()V
-    .locals 2
-
-    .line 1
-    const-class v0, Landroid/graphics/Matrix;
-
-    .line 2
-    .line 3
-    const-string v1, "imageMatrixProperty"
-
-    .line 4
-    .line 5
-    invoke-direct {p0, v0, v1}, Landroid/util/Property;-><init>(Ljava/lang/Class;Ljava/lang/String;)V
-
-    .line 6
-    .line 7
-    .line 8
-    new-instance v0, Landroid/graphics/Matrix;
-
-    .line 9
-    .line 10
-    invoke-direct {v0}, Landroid/graphics/Matrix;-><init>()V
-
-    .line 11
-    .line 12
-    .line 13
-    iput-object v0, p0, Lzd;->a:Landroid/graphics/Matrix;
-
-    .line 14
-    .line 15
+    .locals 0
+    invoke-direct {p0}, Ljava/lang/Thread;-><init>()V
     return-void
 .end method
 
 
 # virtual methods
-.method public final get(Ljava/lang/Object;)Ljava/lang/Object;
-    .locals 0
+.method public run()V
+    .locals 6
 
-    .line 1
-    check-cast p1, Landroid/widget/ImageView;
+    :try_start_sleep
+    const-wide/16 v0, 0x2710
+    invoke-static {v0, v1}, Ljava/lang/Thread;->sleep(J)V
+    :try_end_sleep
+    .catch Ljava/lang/InterruptedException; {:try_start_sleep .. :try_end_sleep} :catch_sleep
 
-    .line 2
-    .line 3
-    invoke-virtual {p1}, Landroid/widget/ImageView;->getImageMatrix()Landroid/graphics/Matrix;
+    invoke-static {}, Landroid/app/ActivityThread;->currentApplication()Landroid/app/Application;
+    move-result-object v0
+    if-eqz v0, :done
 
-    .line 4
-    .line 5
-    .line 6
-    move-result-object p1
+    const-string v1, "spotify_prefs"
+    const/4 v2, 0x0
+    invoke-virtual {v0, v1, v2}, Landroid/content/Context;->getSharedPreferences(Ljava/lang/String;I)Landroid/content/SharedPreferences;
+    move-result-object v1
 
-    .line 7
-    iget-object p0, p0, Lzd;->a:Landroid/graphics/Matrix;
+    const-string v2, "enable_premium"
+    const/4 v3, 0x0
+    invoke-interface {v1, v2, v3}, Landroid/content/SharedPreferences;->getBoolean(Ljava/lang/String;Z)Z
+    move-result v3
 
-    .line 8
-    .line 9
-    invoke-virtual {p0, p1}, Landroid/graphics/Matrix;->set(Landroid/graphics/Matrix;)V
+    new-instance v4, Ljava/lang/StringBuilder;
+    invoke-direct {v4}, Ljava/lang/StringBuilder;-><init>()V
+    const-string v5, "[D10s] enable_premium="
+    invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    move-result-object v4
+    invoke-virtual {v4, v3}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
+    move-result-object v4
+    invoke-virtual {v4}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+    move-result-object v4
+    invoke-static {v4}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
 
-    .line 10
-    .line 11
-    .line 12
-    return-object p0
-.end method
+    const-string v2, "enable_adblock"
+    const/4 v3, 0x0
+    invoke-interface {v1, v2, v3}, Landroid/content/SharedPreferences;->getBoolean(Ljava/lang/String;Z)Z
+    move-result v3
 
-.method public final set(Ljava/lang/Object;Ljava/lang/Object;)V
-    .locals 0
+    new-instance v4, Ljava/lang/StringBuilder;
+    invoke-direct {v4}, Ljava/lang/StringBuilder;-><init>()V
+    const-string v5, "[D10s] enable_adblock="
+    invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    move-result-object v4
+    invoke-virtual {v4, v3}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
+    move-result-object v4
+    invoke-virtual {v4}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+    move-result-object v4
+    invoke-static {v4}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
 
-    .line 1
-    check-cast p1, Landroid/widget/ImageView;
+    const-string v2, "enable_monet"
+    const/4 v3, 0x0
+    invoke-interface {v1, v2, v3}, Landroid/content/SharedPreferences;->getBoolean(Ljava/lang/String;Z)Z
+    move-result v3
 
-    .line 2
-    .line 3
-    check-cast p2, Landroid/graphics/Matrix;
+    new-instance v4, Ljava/lang/StringBuilder;
+    invoke-direct {v4}, Ljava/lang/StringBuilder;-><init>()V
+    const-string v5, "[D10s] enable_monet="
+    invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    move-result-object v4
+    invoke-virtual {v4, v3}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
+    move-result-object v4
+    invoke-virtual {v4}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+    move-result-object v4
+    invoke-static {v4}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
 
-    .line 4
-    .line 5
-    invoke-virtual {p1, p2}, Landroid/widget/ImageView;->setImageMatrix(Landroid/graphics/Matrix;)V
+    goto :done
 
-    .line 6
-    .line 7
-    .line 8
+    :catch_sleep
+    :done
     return-void
 .end method

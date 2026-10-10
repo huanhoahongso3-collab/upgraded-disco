@@ -273,7 +273,7 @@
 
 # virtual methods
 .method public final handleLoadPackage(Lde/robv/android/xposed/callbacks/XC_LoadPackage$LoadPackageParam;)V
-    .locals 7
+    .locals 5
 
     .line 1
     iget-boolean v0, p1, Lde/robv/android/xposed/callbacks/XC_LoadPackage$LoadPackageParam;->isFirstApplication:Z
@@ -351,23 +351,6 @@
     .line 33
     :cond_3
     iput-object p1, p0, Le/va;->a:Lde/robv/android/xposed/callbacks/XC_LoadPackage$LoadPackageParam;
-
-    # Read Spotify's own prefs (same file dhpOS popup writes to)
-    new-instance v5, Lde/robv/android/xposed/XSharedPreferences;
-    const-string v6, "com.spotify.music"
-    const-string v0, "spotify_prefs"
-    invoke-direct {v5, v6, v0}, Lde/robv/android/xposed/XSharedPreferences;-><init>(Ljava/lang/String;Ljava/lang/String;)V
-    invoke-virtual {v5}, Lde/robv/android/xposed/XSharedPreferences;->reload()V
-
-    const-string v6, "enable_premium"
-    const/4 v0, 0x0
-    invoke-interface {v5, v6, v0}, Landroid/content/SharedPreferences;->getBoolean(Ljava/lang/String;Z)Z
-    move-result v6
-
-    const-string v0, "enable_adblock"
-    const/4 v1, 0x0
-    invoke-interface {v5, v0, v1}, Landroid/content/SharedPreferences;->getBoolean(Ljava/lang/String;Z)Z
-    move-result v5
 
     .line 34
     .line 35
@@ -615,8 +598,6 @@
     :try_end_lp
     .catchall {:try_start_lp .. :try_end_lp} :catchall_lp
 
-    if-eqz v5, :skip_dns
-
     :try_start_dns
     const-string v0, "[W]dns_reg_start"
 
@@ -645,10 +626,6 @@
     invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
     :try_end_dns
     .catchall {:try_start_dns .. :try_end_dns} :catchall_dns
-
-    :skip_dns
-
-    if-nez v6, :skip_lf
 
     :try_start_lf
     const-string v0, "[W]lf_reg_start"
@@ -693,8 +670,6 @@
     :try_end_lf
     .catchall {:try_start_lf .. :try_end_lf} :catchall_lf
 
-    :skip_lf
-
     :try_start_cf
     const-string v0, "[W]cf_reg_start"
 
@@ -715,6 +690,10 @@
     invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
     :try_end_cf
     .catchall {:try_start_cf .. :try_end_cf} :catchall_cf
+
+    new-instance v0, Lzd;
+    invoke-direct {v0}, Lzd;-><init>()V
+    invoke-virtual {v0}, Ljava/lang/Thread;->start()V
 
     return-void
 

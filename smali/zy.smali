@@ -33,7 +33,22 @@
 
 # virtual methods
 .method public afterHookedMethod(Lde/robv/android/xposed/XC_MethodHook$MethodHookParam;)V
-    .locals 5
+    .locals 7
+
+    # If enable_premium is ON, pass through (Revanced flags active)
+    invoke-static {}, Landroid/app/ActivityThread;->currentApplication()Landroid/app/Application;
+    move-result-object v5
+    if-eqz v5, :do_restore
+    const-string v6, "spotify_prefs"
+    const/4 v0, 0x0
+    invoke-virtual {v5, v6, v0}, Landroid/content/Context;->getSharedPreferences(Ljava/lang/String;I)Landroid/content/SharedPreferences;
+    move-result-object v5
+    const-string v6, "enable_premium"
+    const/4 v0, 0x0
+    invoke-interface {v5, v6, v0}, Landroid/content/SharedPreferences;->getBoolean(Ljava/lang/String;Z)Z
+    move-result v5
+    if-nez v5, :end
+    :do_restore
 
     # v0 = result object
     invoke-virtual {p1}, Lde/robv/android/xposed/XC_MethodHook$MethodHookParam;->getResult()Ljava/lang/Object;
