@@ -380,7 +380,7 @@
     .line 155
     :cond_1
     :goto_4
-    const/4 v4, 0x1
+    const/4 v4, 0x0
 
     .line 156
     :try_start_5
