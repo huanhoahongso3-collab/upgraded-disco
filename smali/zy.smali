@@ -41,6 +41,74 @@
 
     if-eqz v0, :end
 
+    # Handle String results (Revanced-hardcoded string flags)
+    instance-of v1, v0, Ljava/lang/String;
+    if-eqz v1, :not_string
+
+    check-cast v0, Ljava/lang/String;
+
+    # v2 = key (null if no args, e.g. isAdsEnabled)
+    const/4 v2, 0x0
+    iget-object v3, p1, Lde/robv/android/xposed/XC_MethodHook$MethodHookParam;->args:[Ljava/lang/Object;
+    if-eqz v3, :end
+    array-length v4, v3
+    if-eqz v4, :end
+    const/4 v4, 0x0
+    aget-object v2, v3, v4
+    if-eqz v2, :end
+    instance-of v4, v2, Ljava/lang/String;
+    if-eqz v4, :end
+    check-cast v2, Ljava/lang/String;
+
+    const-string v3, "player-license"
+    invoke-virtual {v2, v3}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+    move-result v3
+    if-nez v3, :restore_open
+
+    const-string v3, "player-license-v2"
+    invoke-virtual {v2, v3}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+    move-result v3
+    if-nez v3, :restore_open
+
+    const-string v3, "catalogue"
+    invoke-virtual {v2, v3}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+    move-result v3
+    if-nez v3, :restore_open
+
+    const-string v3, "type"
+    invoke-virtual {v2, v3}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+    move-result v3
+    if-nez v3, :restore_free
+
+    const-string v3, "financial-product"
+    invoke-virtual {v2, v3}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+    move-result v3
+    if-nez v3, :restore_empty
+
+    goto :end
+
+    :restore_open
+    const-string v3, "[W]lds_restore_str:open"
+    invoke-static {v3}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+    const-string v3, "open"
+    invoke-virtual {p1, v3}, Lde/robv/android/xposed/XC_MethodHook$MethodHookParam;->setResult(Ljava/lang/Object;)V
+    goto :end
+
+    :restore_free
+    const-string v3, "[W]lds_restore_str:free"
+    invoke-static {v3}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+    const-string v3, "free"
+    invoke-virtual {p1, v3}, Lde/robv/android/xposed/XC_MethodHook$MethodHookParam;->setResult(Ljava/lang/Object;)V
+    goto :end
+
+    :restore_empty
+    const-string v3, "[W]lds_restore_str:empty"
+    invoke-static {v3}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+    const-string v3, ""
+    invoke-virtual {p1, v3}, Lde/robv/android/xposed/XC_MethodHook$MethodHookParam;->setResult(Ljava/lang/Object;)V
+    goto :end
+
+    :not_string
     # Only handle Boolean results
     instance-of v1, v0, Ljava/lang/Boolean;
     if-eqz v1, :end
