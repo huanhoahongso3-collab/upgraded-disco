@@ -303,6 +303,9 @@
     .line 85
     invoke-static {p0}, Lir;->b(Landroid/content/Context;)V
 
+    # Reset track ID so recents-restart triggers switchToWebPlayer on next setMetadata
+    sput-object v2, Ler;->nativeTrackId:Ljava/lang/String;
+
     .line 86
     .line 87
     .line 88
