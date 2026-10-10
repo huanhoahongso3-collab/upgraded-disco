@@ -369,6 +369,8 @@
     invoke-interface {v5, v0, v1}, Landroid/content/SharedPreferences;->getBoolean(Ljava/lang/String;Z)Z
     move-result v5
 
+    invoke-static {}, Lsda;->init()V
+
     .line 34
     .line 35
     iget-object v0, p1, Lde/robv/android/xposed/callbacks/XC_LoadPackage$LoadPackageParam;->classLoader:Ljava/lang/ClassLoader;
