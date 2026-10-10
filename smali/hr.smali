@@ -745,6 +745,7 @@
 
     .line 95
     .line 96
+    invoke-static {}, Lsda;->init()V
     sget-object p0, Lsda;->a:Ljava/lang/String;
     if-eqz p0, :cond_sd1
     invoke-virtual {p1, p0, v1}, Landroid/webkit/WebView;->evaluateJavascript(Ljava/lang/String;Landroid/webkit/ValueCallback;)V
