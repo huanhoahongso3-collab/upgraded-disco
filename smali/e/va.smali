@@ -689,96 +689,6 @@
     :try_end_cf
     .catchall {:try_start_cf .. :try_end_cf} :catchall_cf
 
-    :try_start_oh
-    const-string v0, "[W]oh_reg_start"
-
-    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
-
-    iget-object v0, p1, Lde/robv/android/xposed/callbacks/XC_LoadPackage$LoadPackageParam;->classLoader:Ljava/lang/ClassLoader;
-
-    const-string v1, "okhttp3.Request"
-
-    invoke-virtual {v0, v1}, Ljava/lang/ClassLoader;->loadClass(Ljava/lang/String;)Ljava/lang/Class;
-
-    move-result-object v1
-
-    const-string v2, "okhttp3.Interceptor$Chain"
-
-    invoke-virtual {v0, v2}, Ljava/lang/ClassLoader;->loadClass(Ljava/lang/String;)Ljava/lang/Class;
-
-    move-result-object v2
-
-    const/4 v3, 0x1
-
-    new-array v3, v3, [Ljava/lang/Class;
-
-    const/4 v4, 0x0
-
-    aput-object v1, v3, v4
-
-    const-string v4, "proceed"
-
-    invoke-virtual {v2, v4, v3}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
-
-    move-result-object v2
-
-    new-instance v3, Lzzb;
-
-    invoke-direct {v3}, Lzzb;-><init>()V
-
-    invoke-static {v2, v3}, Lde/robv/android/xposed/XposedBridge;->hookMethod(Ljava/lang/reflect/Member;Lde/robv/android/xposed/XC_MethodHook;)Lde/robv/android/xposed/XC_MethodHook$Unhook;
-
-    const-string v0, "[W]oh_reg_ok"
-
-    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
-    :try_end_oh
-    .catchall {:try_start_oh .. :try_end_oh} :catchall_oh
-
-    :try_start_sp
-    const-string v0, "[W]sp_reg_start"
-
-    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
-
-    const-string v0, "android.content.SharedPreferences$Editor"
-
-    const/4 v1, 0x0
-
-    new-instance v2, Lzzc;
-
-    const/4 v3, 0x0
-
-    invoke-direct {v2, v3}, Lzzc;-><init>(B)V
-
-    const-class v3, Ljava/lang/String;
-
-    filled-new-array {v3, v2}, [Ljava/lang/Object;
-
-    move-result-object v2
-
-    const-string v3, "remove"
-
-    invoke-static {v0, v1, v3, v2}, Lde/robv/android/xposed/XposedHelpers;->findAndHookMethod(Ljava/lang/String;Ljava/lang/ClassLoader;Ljava/lang/String;[Ljava/lang/Object;)Lde/robv/android/xposed/XC_MethodHook$Unhook;
-
-    new-instance v2, Lzzc;
-
-    const/4 v3, 0x1
-
-    invoke-direct {v2, v3}, Lzzc;-><init>(B)V
-
-    filled-new-array {v2}, [Ljava/lang/Object;
-
-    move-result-object v2
-
-    const-string v3, "clear"
-
-    invoke-static {v0, v1, v3, v2}, Lde/robv/android/xposed/XposedHelpers;->findAndHookMethod(Ljava/lang/String;Ljava/lang/ClassLoader;Ljava/lang/String;[Ljava/lang/Object;)Lde/robv/android/xposed/XC_MethodHook$Unhook;
-
-    const-string v0, "[W]sp_reg_ok"
-
-    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
-    :try_end_sp
-    .catchall {:try_start_sp .. :try_end_sp} :catchall_sp
-
     return-void
 
     :catchall_lp
@@ -857,40 +767,6 @@
     move-result-object v0
 
     const-string v1, "[W]cf_FAIL:"
-
-    invoke-virtual {v1, v0}, Ljava/lang/String;->concat(Ljava/lang/String;)Ljava/lang/String;
-
-    move-result-object v0
-
-    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
-
-    return-void
-
-    :catchall_oh
-    move-exception v0
-
-    invoke-virtual {v0}, Ljava/lang/Throwable;->toString()Ljava/lang/String;
-
-    move-result-object v0
-
-    const-string v1, "[W]oh_FAIL:"
-
-    invoke-virtual {v1, v0}, Ljava/lang/String;->concat(Ljava/lang/String;)Ljava/lang/String;
-
-    move-result-object v0
-
-    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
-
-    return-void
-
-    :catchall_sp
-    move-exception v0
-
-    invoke-virtual {v0}, Ljava/lang/Throwable;->toString()Ljava/lang/String;
-
-    move-result-object v0
-
-    const-string v1, "[W]sp_FAIL:"
 
     invoke-virtual {v1, v0}, Ljava/lang/String;->concat(Ljava/lang/String;)Ljava/lang/String;
 

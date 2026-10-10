@@ -81,26 +81,6 @@
     move-result v1
     if-nez v1, :block
 
-    const-string v1, "aet.spotify.com"
-    invoke-virtual {v0, v1}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
-    move-result v1
-    if-nez v1, :block
-
-    const-string v1, "graph.facebook.com"
-    invoke-virtual {v0, v1}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
-    move-result v1
-    if-nez v1, :block
-
-    const-string v1, "doubleclick"
-    invoke-virtual {v0, v1}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
-    move-result v1
-    if-nez v1, :block
-
-    const-string v1, "googleads"
-    invoke-virtual {v0, v1}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
-    move-result v1
-    if-nez v1, :block
-
     goto :end
 
     :block
