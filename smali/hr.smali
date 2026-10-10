@@ -759,6 +759,13 @@
     const-string p0, "(function adMute(){try{var s=\'[data-testid=\"ad-label\"],[data-testid=\"advertisement\"],[aria-label=\"Advertisement\"],[data-testid*=\"sponsored\"]\';var isAd=!!document.querySelector(s);var a=document.querySelector(\'audio\');if(a){if(isAd){a.volume=0;a.muted=true;}else if(a.muted&&a.volume===0){a.muted=false;a.volume=1;}}}catch(e){}setTimeout(adMute,600);})();"
     invoke-virtual {p1, p0, v1}, Landroid/webkit/WebView;->evaluateJavascript(Ljava/lang/String;Landroid/webkit/ValueCallback;)V
 
+    # Wrap SpotiDuck fetch hook to auto-DELETE old hobs_ device on new registration.
+    # SpotiDuck sets hidden=false so stale sessions appear as "Unavailable" in Connect.
+    # This tracks the last-registered device ID in localStorage and sends a spclient
+    # DELETE for the previous ID whenever a new hobs_ PUT is seen.
+    const-string p0, "(function sdClean(){var _f=window.fetch;window.fetch=async function(input,init){var url=typeof input===\'string\'?input:(input&&input.url?input.url:\'\');var meth=(init&&init.method||(input&&input.method)||\'GET\').toUpperCase();if(url&&meth===\'PUT\'&&url.indexOf(\'/connect-state/v1/devices/hobs_\')!==-1){try{var parts=url.split(\'/connect-state/v1/devices/\');if(parts.length>=2){var base=parts[0];var cid=parts[1].split(\'/\')[0].split(\'?\')[0];var hdrs=init&&init.headers;var auth=hdrs?(typeof hdrs.get===\'function\'?hdrs.get(\'Authorization\')||\'\':(hdrs[\'Authorization\']||\'\')):\'\';;var oid=null;try{oid=localStorage.getItem(\'__sd_devid\');}catch(e){}if(oid&&oid!==cid&&auth){_f.call(window,base+\'/connect-state/v1/devices/\'+oid,{method:\'DELETE\',headers:{\'Authorization\':auth}}).catch(function(){});}try{localStorage.setItem(\'__sd_devid\',cid);}catch(e){}}}catch(e){}};return _f.call(this,input,init);};})();"
+    invoke-virtual {p1, p0, v1}, Landroid/webkit/WebView;->evaluateJavascript(Ljava/lang/String;Landroid/webkit/ValueCallback;)V
+
     :cond_6
     return-void
 .end method
