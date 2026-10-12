@@ -292,9 +292,17 @@
 
     .line 7
     .line 8
+    const-string v2, "com.spotify.music"
+
+    invoke-virtual {v0, v2}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
+
+    move-result v1
+
+    if-nez v1, :cond_1
+
     iget-object v1, p1, Lde/robv/android/xposed/callbacks/XC_LoadPackage$LoadPackageParam;->classLoader:Ljava/lang/ClassLoader;
 
-    # cloners randomize the package name: detect Spotify by its classes instead
+    # cloners may randomize the package name: fall back to detecting Spotify by its classes
     const-string v2, "com.spotify.connectivity.flags.LoadedFlags"
 
     invoke-static {v2, v1}, Lde/robv/android/xposed/XposedHelpers;->findClassIfExists(Ljava/lang/String;Ljava/lang/ClassLoader;)Ljava/lang/Class;
@@ -349,22 +357,18 @@
     :cond_3
     iput-object p1, p0, Le/va;->a:Lde/robv/android/xposed/callbacks/XC_LoadPackage$LoadPackageParam;
 
-    # Read Spotify's own prefs (same file dhpOS popup writes to)
-    new-instance v5, Lde/robv/android/xposed/XSharedPreferences;
-    iget-object v6, p1, Lde/robv/android/xposed/callbacks/XC_LoadPackage$LoadPackageParam;->packageName:Ljava/lang/String;
-    const-string v0, "spotify_prefs"
-    invoke-direct {v5, v6, v0}, Lde/robv/android/xposed/XSharedPreferences;-><init>(Ljava/lang/String;Ljava/lang/String;)V
-    invoke-virtual {v5}, Lde/robv/android/xposed/XSharedPreferences;->reload()V
-
-    const-string v6, "enable_premium"
-    const/4 v0, 0x0
-    invoke-interface {v5, v6, v0}, Landroid/content/SharedPreferences;->getBoolean(Ljava/lang/String;Z)Z
-    move-result v6
-
-    const-string v0, "enable_adblock"
-    const/4 v1, 0x0
-    invoke-interface {v5, v0, v1}, Landroid/content/SharedPreferences;->getBoolean(Ljava/lang/String;Z)Z
+    # Read the app's own prefs file directly: XSharedPreferences.reload() throws in cloners (hidden-API stub)
+    iget-object v6, p1, Lde/robv/android/xposed/callbacks/XC_LoadPackage$LoadPackageParam;->appInfo:Landroid/content/pm/ApplicationInfo;
+    iget-object v6, v6, Landroid/content/pm/ApplicationInfo;->dataDir:Ljava/lang/String;
+    const-string v0, "/shared_prefs/spotify_prefs.xml"
+    invoke-virtual {v6, v0}, Ljava/lang/String;->concat(Ljava/lang/String;)Ljava/lang/String;
+    move-result-object v6
+    const-string v1, "enable_adblock"
+    invoke-static {v6, v1}, Le/va;->rb(Ljava/lang/String;Ljava/lang/String;)Z
     move-result v5
+    const-string v1, "enable_premium"
+    invoke-static {v6, v1}, Le/va;->rb(Ljava/lang/String;Ljava/lang/String;)Z
+    move-result v6
 
     .line 34
     .line 35
@@ -799,4 +803,40 @@
     invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
 
     return-void
+.end method
+
+
+.method public static rb(Ljava/lang/String;Ljava/lang/String;)Z
+    .locals 6
+
+    :try_start_rb
+    new-instance v0, Ljava/io/File;
+    invoke-direct {v0, p0}, Ljava/io/File;-><init>(Ljava/lang/String;)V
+    invoke-virtual {v0}, Ljava/io/File;->length()J
+    move-result-wide v2
+    long-to-int v2, v2
+    new-array v3, v2, [B
+    new-instance v1, Ljava/io/FileInputStream;
+    invoke-direct {v1, v0}, Ljava/io/FileInputStream;-><init>(Ljava/io/File;)V
+    invoke-virtual {v1, v3}, Ljava/io/InputStream;->read([B)I
+    invoke-virtual {v1}, Ljava/io/InputStream;->close()V
+    new-instance v4, Ljava/lang/String;
+    invoke-direct {v4, v3}, Ljava/lang/String;-><init>([B)V
+    const-string v5, "name=\""
+    invoke-virtual {v5, p1}, Ljava/lang/String;->concat(Ljava/lang/String;)Ljava/lang/String;
+    move-result-object v5
+    const-string v0, "\" value=\"true\""
+    invoke-virtual {v5, v0}, Ljava/lang/String;->concat(Ljava/lang/String;)Ljava/lang/String;
+    move-result-object v5
+    invoke-virtual {v4, v5}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
+    move-result v0
+    :try_end_rb
+    .catchall {:try_start_rb .. :try_end_rb} :catch_rb
+
+    return v0
+
+    :catch_rb
+    move-exception v0
+    const/4 v0, 0x0
+    return v0
 .end method
