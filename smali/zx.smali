@@ -48,14 +48,6 @@
     :try_end_0
     .catchall {:try_start_0 .. :try_end_0} :catchall_0
 
-    const-string v3, "com.spotify.music"
-
-    invoke-virtual {v2, v3}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
-
-    move-result v2
-
-    if-eqz v2, :cond_end
-
     const-string v2, "[W]lp_block_rm:"
 
     if-nez v1, :cond_has_key
