@@ -136,9 +136,9 @@
 
     invoke-virtual {v6, v7}, Landroid/view/View;->getLocationOnScreen([I)V
 
-    # tapScreenY = composeScreenY + (int)(218dp * displayDensity)
-    # 218dp is the offset from compose_view top to Web Player row center
-    # (measured at 420dpi: 218 * 2.625 = 572px).  Scaling by density
+    # tapScreenY = composeScreenY + (int)(149dp * displayDensity)
+    # 149dp is the offset from compose_view top to Web Player row center
+    # (measured at 450dpi: 149 * 2.8125 = 420px).  Scaling by density
     # makes it correct on any phone density.
     const/4 v1, 0x1
 
@@ -157,8 +157,12 @@
 
     iget v0, v0, Landroid/util/DisplayMetrics;->density:F
 
-    # 218.0f * density → int offset
-    const/high16 v2, 0x43590000
+    # 149.0f * density → int offset
+    # Measured (uiautomator, 1080x2400 @ 2.8125 density, Spotify 9.0.56 Connect sheet):
+    # compose_view top=787px, Web Player (Chrome) row center=1207px
+    # offset = 1207-787 = 420px / 2.8125 = 149.3dp → 149dp (0x43150000)
+    # dp-based and relative to compose_view top, so it scales with density / screen height
+    const/high16 v2, 0x43150000
 
     mul-float/2addr v0, v2
 
