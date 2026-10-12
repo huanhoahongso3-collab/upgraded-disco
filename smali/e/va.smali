@@ -292,18 +292,15 @@
 
     .line 7
     .line 8
-    iget-object v1, p0, Le/va;->d:Ljava/util/Map;
+    iget-object v1, p1, Lde/robv/android/xposed/callbacks/XC_LoadPackage$LoadPackageParam;->classLoader:Ljava/lang/ClassLoader;
 
-    .line 9
-    .line 10
-    invoke-interface {v1, v0}, Ljava/util/Map;->containsKey(Ljava/lang/Object;)Z
+    # cloners randomize the package name: detect Spotify by its classes instead
+    const-string v2, "com.spotify.connectivity.flags.LoadedFlags"
 
-    .line 11
-    .line 12
-    .line 13
-    move-result v1
+    invoke-static {v2, v1}, Lde/robv/android/xposed/XposedHelpers;->findClassIfExists(Ljava/lang/String;Ljava/lang/ClassLoader;)Ljava/lang/Class;
 
-    .line 14
+    move-result-object v1
+
     if-nez v1, :cond_1
 
     .line 15
@@ -354,7 +351,7 @@
 
     # Read Spotify's own prefs (same file dhpOS popup writes to)
     new-instance v5, Lde/robv/android/xposed/XSharedPreferences;
-    const-string v6, "com.spotify.music"
+    iget-object v6, p1, Lde/robv/android/xposed/callbacks/XC_LoadPackage$LoadPackageParam;->packageName:Ljava/lang/String;
     const-string v0, "spotify_prefs"
     invoke-direct {v5, v6, v0}, Lde/robv/android/xposed/XSharedPreferences;-><init>(Ljava/lang/String;Ljava/lang/String;)V
     invoke-virtual {v5}, Lde/robv/android/xposed/XSharedPreferences;->reload()V
