@@ -153,10 +153,12 @@
 
     iget v0, v0, Landroid/util/DisplayMetrics;->density:F
 
-    # 262.0f * density → int offset
-    # Measured: compose_view top=883px, Web Player (Chrome) center=1618px
-    # offset = 1618-883 = 735px / 2.8125dpi = 261.3dp → 262dp (0x43830000)
-    const/high16 v2, 0x43830000
+    # 149.0f * density → int offset
+    # Measured (uiautomator, 1080x2400 @ 2.8125 density, Spotify 9.0.56 Connect sheet):
+    # compose_view top=787px, Web Player (Chrome) row center=1207px
+    # offset = 1207-787 = 420px / 2.8125 = 149.3dp → 149dp (0x43150000)
+    # dp-based and relative to compose_view top, so it scales with density / screen height
+    const/high16 v2, 0x43150000
 
     mul-float/2addr v0, v2
 
