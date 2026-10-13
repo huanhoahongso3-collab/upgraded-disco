@@ -14,6 +14,8 @@
 
 .field public static lastSwitchMs:J
 
+.field public static webReadyMs:J
+
 # instance fields
 .field public final a:Landroid/content/Context;
 
@@ -274,6 +276,12 @@
 
     .line 36
     invoke-static {p1}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+    # web player device is registered: let sw2 tap the Connect row now
+    invoke-static {}, Ljava/lang/System;->currentTimeMillis()J
+
+    move-result-wide v0
+
+    sput-wide v0, Ler;->webReadyMs:J
 
     .line 37
     .line 38

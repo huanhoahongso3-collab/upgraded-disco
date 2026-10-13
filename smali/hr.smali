@@ -1080,6 +1080,13 @@
     .line 210
     invoke-static {v4}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
 
+    # web player device registered: sw2 may tap the Connect row
+    invoke-static {}, Ljava/lang/System;->currentTimeMillis()J
+
+    move-result-wide v7
+
+    sput-wide v7, Ler;->webReadyMs:J
+
     .line 211
     invoke-interface {p2}, Landroid/webkit/WebResourceRequest;->getRequestHeaders()Ljava/util/Map;
 

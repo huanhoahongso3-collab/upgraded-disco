@@ -31,6 +31,58 @@
 .method public final run()V
     .locals 16
 
+    # Wait for the web player device to register (Ler;->webReadyMs) before tapping its row;
+    # on a cold start the Connect list is still empty at the fixed delay and the tap hits nothing.
+    # Give up waiting 30s after the switch was queued.
+    sget-wide v0, Ler;->webReadyMs:J
+
+    invoke-static {}, Ljava/lang/System;->currentTimeMillis()J
+
+    move-result-wide v2
+
+    sget-wide v4, Ler;->lastSwitchMs:J
+
+    sub-long v6, v2, v4
+
+    const-wide/16 v8, 0x7530
+
+    cmp-long v10, v6, v8
+
+    if-gez v10, :go
+
+    const-wide/16 v8, 0x0
+
+    cmp-long v10, v0, v8
+
+    if-eqz v10, :retry
+
+    # ready: let the list render for 1.5s
+    sub-long v6, v2, v0
+
+    const-wide/16 v8, 0x5dc
+
+    cmp-long v10, v6, v8
+
+    if-gez v10, :go
+
+    :retry
+    new-instance v0, Landroid/os/Handler;
+
+    invoke-static {}, Landroid/os/Looper;->getMainLooper()Landroid/os/Looper;
+
+    move-result-object v1
+
+    invoke-direct {v0, v1}, Landroid/os/Handler;-><init>(Landroid/os/Looper;)V
+
+    const-wide/16 v2, 0x2ee
+
+    move-object/from16 v4, p0
+
+    invoke-virtual {v0, v4, v2, v3}, Landroid/os/Handler;->postDelayed(Ljava/lang/Runnable;J)Z
+
+    return-void
+
+    :go
     :try_start
     # --- Get WindowManagerGlobal.getInstance() ---
     const-string v0, "android.view.WindowManagerGlobal"
