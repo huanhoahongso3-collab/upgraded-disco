@@ -73,6 +73,9 @@
     .line 17
     move-result-object v2
 
+    # pull settings changed in the module app (home-screen UI) + observe live changes
+    invoke-static {p1}, Ldhp/tpl/spotify/webview/Sync;->pull(Landroid/content/Context;)V
+
     .line 18
     :try_start_0
     iget-object v4, v0, Lde/robv/android/xposed/callbacks/XC_LoadPackage$LoadPackageParam;->classLoader:Ljava/lang/ClassLoader;

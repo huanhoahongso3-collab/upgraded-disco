@@ -150,6 +150,10 @@
     .line 48
     invoke-interface {p1}, Landroid/content/SharedPreferences$Editor;->commit()Z
 
+    # mirror the change to the module app (background thread, never throws)
+    iget-object v1, p0, Lxp;->d:Ljava/lang/String;
+    invoke-static {v0, v1, p2}, Ldhp/tpl/spotify/webview/Sync;->push(Landroid/content/Context;Ljava/lang/String;Z)V
+
     .line 49
     .line 50
     .line 51
