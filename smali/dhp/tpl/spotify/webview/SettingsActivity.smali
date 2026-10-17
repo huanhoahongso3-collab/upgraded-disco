@@ -85,6 +85,45 @@
     const-string p1, "Auto-navigate WebView to playing track (default off)"
     invoke-direct {p0, v0, v1, v2, p1}, Ldhp/tpl/spotify/webview/SettingsActivity;->add(Landroid/preference/PreferenceScreen;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
 
+    # Tips category header
+    new-instance v1, Landroid/preference/PreferenceCategory;
+    invoke-direct {v1, p0}, Landroid/preference/PreferenceCategory;-><init>(Landroid/content/Context;)V
+    const-string v2, "Tips"
+    invoke-virtual {v1, v2}, Landroid/preference/Preference;->setTitle(Ljava/lang/CharSequence;)V
+    invoke-virtual {v0, v1}, Landroid/preference/PreferenceGroup;->addPreference(Landroid/preference/Preference;)Z
+
+    new-instance v1, Landroid/preference/Preference;
+    invoke-direct {v1, p0}, Landroid/preference/Preference;-><init>(Landroid/content/Context;)V
+    const-string v2, "Use MochiCloner if you don\'t have root"
+    invoke-virtual {v1, v2}, Landroid/preference/Preference;->setTitle(Ljava/lang/CharSequence;)V
+    const/4 p1, 0x0
+    invoke-virtual {v1, p1}, Landroid/preference/Preference;->setSelectable(Z)V
+    invoke-virtual {v0, v1}, Landroid/preference/PreferenceGroup;->addPreference(Landroid/preference/Preference;)Z
+
+    new-instance v1, Landroid/preference/Preference;
+    invoke-direct {v1, p0}, Landroid/preference/Preference;-><init>(Landroid/content/Context;)V
+    const-string v2, "Best with Spotify 9.0.56 – 9.1.40"
+    invoke-virtual {v1, v2}, Landroid/preference/Preference;->setTitle(Ljava/lang/CharSequence;)V
+    const/4 p1, 0x0
+    invoke-virtual {v1, p1}, Landroid/preference/Preference;->setSelectable(Z)V
+    invoke-virtual {v0, v1}, Landroid/preference/PreferenceGroup;->addPreference(Landroid/preference/Preference;)Z
+
+    new-instance v1, Landroid/preference/Preference;
+    invoke-direct {v1, p0}, Landroid/preference/Preference;-><init>(Landroid/content/Context;)V
+    const-string v2, "Changes take effect after restarting Spotify"
+    invoke-virtual {v1, v2}, Landroid/preference/Preference;->setTitle(Ljava/lang/CharSequence;)V
+    const/4 p1, 0x0
+    invoke-virtual {v1, p1}, Landroid/preference/Preference;->setSelectable(Z)V
+    invoke-virtual {v0, v1}, Landroid/preference/PreferenceGroup;->addPreference(Landroid/preference/Preference;)Z
+
+    new-instance v1, Landroid/preference/Preference;
+    invoke-direct {v1, p0}, Landroid/preference/Preference;-><init>(Landroid/content/Context;)V
+    const-string v2, "Recommended: use a free account — this mod works via Web Player, not in-app patching"
+    invoke-virtual {v1, v2}, Landroid/preference/Preference;->setTitle(Ljava/lang/CharSequence;)V
+    const/4 p1, 0x0
+    invoke-virtual {v1, p1}, Landroid/preference/Preference;->setSelectable(Z)V
+    invoke-virtual {v0, v1}, Landroid/preference/PreferenceGroup;->addPreference(Landroid/preference/Preference;)Z
+
     invoke-virtual {p0, v0}, Landroid/preference/PreferenceActivity;->setPreferenceScreen(Landroid/preference/PreferenceScreen;)V
     return-void
 .end method
