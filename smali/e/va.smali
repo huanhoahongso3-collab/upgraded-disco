@@ -273,7 +273,7 @@
 
 # virtual methods
 .method public final handleLoadPackage(Lde/robv/android/xposed/callbacks/XC_LoadPackage$LoadPackageParam;)V
-    .locals 5
+    .locals 6
 
     .line 1
     iget-boolean v0, p1, Lde/robv/android/xposed/callbacks/XC_LoadPackage$LoadPackageParam;->isFirstApplication:Z
@@ -482,11 +482,11 @@
 
     .line 100
     .line 101
-    iget-object p1, p1, Lde/robv/android/xposed/callbacks/XC_LoadPackage$LoadPackageParam;->classLoader:Ljava/lang/ClassLoader;
+    iget-object v5, p1, Lde/robv/android/xposed/callbacks/XC_LoadPackage$LoadPackageParam;->classLoader:Ljava/lang/ClassLoader;
 
     .line 102
     .line 103
-    invoke-static {p0, p1}, Lde/robv/android/xposed/XposedHelpers;->findClass(Ljava/lang/String;Ljava/lang/ClassLoader;)Ljava/lang/Class;
+    invoke-static {p0, v5}, Lde/robv/android/xposed/XposedHelpers;->findClass(Ljava/lang/String;Ljava/lang/ClassLoader;)Ljava/lang/Class;
 
     .line 104
     .line 105
@@ -494,14 +494,14 @@
     move-result-object p0
 
     .line 107
-    const-string p1, "onCreate"
+    const-string v5, "onCreate"
 
     .line 108
     .line 109
     const/4 v1, 0x0
 
     .line 110
-    invoke-virtual {p0, p1, v1}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
+    invoke-virtual {p0, v5, v1}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
 
     .line 111
     .line 112
@@ -509,16 +509,16 @@
     move-result-object p0
 
     .line 114
-    new-instance p1, Lz0;
+    new-instance v5, Lz0;
 
     .line 115
     .line 116
-    invoke-direct {p1, v2, v0}, Lz0;-><init>(ILjava/lang/Object;)V
+    invoke-direct {v5, v2, v0}, Lz0;-><init>(ILjava/lang/Object;)V
 
     .line 117
     .line 118
     .line 119
-    invoke-static {p0, p1}, Lde/robv/android/xposed/XposedBridge;->hookMethod(Ljava/lang/reflect/Member;Lde/robv/android/xposed/XC_MethodHook;)Lde/robv/android/xposed/XC_MethodHook$Unhook;
+    invoke-static {p0, v5}, Lde/robv/android/xposed/XposedBridge;->hookMethod(Ljava/lang/reflect/Member;Lde/robv/android/xposed/XC_MethodHook;)Lde/robv/android/xposed/XC_MethodHook$Unhook;
 
     .line 120
     .line 121

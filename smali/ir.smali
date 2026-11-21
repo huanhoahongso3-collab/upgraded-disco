@@ -561,7 +561,9 @@
     move-result-object v9
 
     .line 161
-    const-string v10, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+    invoke-static {}, Lzua;->desktop()Ljava/lang/String;
+
+    move-result-object v10
 
     .line 162
     .line 163
@@ -927,6 +929,8 @@
     .line 353
     const-string p0, "https://open.spotify.com/"
 
+    invoke-static {v8, p0}, Lzua;->apply(Landroid/webkit/WebView;Ljava/lang/String;)V
+
     .line 354
     .line 355
     invoke-virtual {v8, p0}, Landroid/webkit/WebView;->loadUrl(Ljava/lang/String;)V
@@ -948,6 +952,8 @@
     .line 363
     .line 364
     const-string p0, "https://accounts.spotify.com/login?continue=https%3A%2F%2Fopen.spotify.com%2F&allow_password=1"
+
+    invoke-static {v8, p0}, Lzua;->apply(Landroid/webkit/WebView;Ljava/lang/String;)V
 
     .line 365
     .line 366

@@ -379,6 +379,29 @@
 
 
 # virtual methods
+.method public shouldOverrideUrlLoading(Landroid/webkit/WebView;Landroid/webkit/WebResourceRequest;)Z
+    .locals 1
+
+    if-eqz p2, :ret
+
+    invoke-interface {p2}, Landroid/webkit/WebResourceRequest;->getUrl()Landroid/net/Uri;
+
+    move-result-object v0
+
+    if-eqz v0, :ret
+
+    invoke-virtual {v0}, Landroid/net/Uri;->toString()Ljava/lang/String;
+
+    move-result-object v0
+
+    invoke-static {p1, v0}, Lzua;->apply(Landroid/webkit/WebView;Ljava/lang/String;)V
+
+    :ret
+    const/4 p0, 0x0
+
+    return p0
+.end method
+
 .method public final onPageFinished(Landroid/webkit/WebView;Ljava/lang/String;)V
     .locals 5
 
@@ -732,7 +755,7 @@
 
     .line 95
     .line 96
-    const-string p0, "(function(){if(!window.chrome)window.chrome={app:{isInstalled:false},runtime:{}};if(window.__morpheSessionHooked)return;window.__morpheSessionHooked=true;var DBG=function(m){try{androidBridge.onIdNotFound(\'[W]\'+m);}catch(e){}};DBG(\'init\');function chkPlay(){try{var p=document.querySelector(\'[data-testid=\"control-button-playpause\"]\');if(p&&p.getAttribute(\'aria-label\')&&p.getAttribute(\'aria-label\').indexOf(\'Pause\')>=0){DBG(\'play:ok\');return;}}catch(e){}chkPlay._r=(chkPlay._r||0)+1;if(chkPlay._r<30)setTimeout(chkPlay,1000);else DBG(\'play:nf\');}setTimeout(chkPlay,3000);DBG(\'hooks_done\');})();"
+    const-string p0, "(function(){if(!window.chrome)window.chrome={app:{isInstalled:false},runtime:{}};if(window.__morpheSessionHooked)return;window.__morpheSessionHooked=true;var AB=window.androidBridge;var DBG=function(m){try{AB.onIdNotFound(\'[W]\'+m);}catch(e){}};DBG(\'init\');function chkPlay(){try{var p=document.querySelector(\'[data-testid=\"control-button-playpause\"]\');if(p&&p.getAttribute(\'aria-label\')&&p.getAttribute(\'aria-label\').indexOf(\'Pause\')>=0){DBG(\'play:ok\');return;}}catch(e){}chkPlay._r=(chkPlay._r||0)+1;if(chkPlay._r<30)setTimeout(chkPlay,1000);else DBG(\'play:nf\');}setTimeout(chkPlay,3000);DBG(\'hooks_done\');})();"
 
     .line 97
     .line 98
@@ -741,7 +764,9 @@
     .line 99
     .line 100
     .line 101
-    const-string p0, "(function(){try{if(!window.__uaSpoofed){window.__uaSpoofed=true;Object.defineProperty(navigator,\'platform\',{get:function(){return \'Win32\';}});Object.defineProperty(navigator,\'maxTouchPoints\',{get:function(){return 0;}});try{var uad={brands:[{brand:\'Not A(Brand\',version:\'99\'},{brand:\'Google Chrome\',version:\'131\'},{brand:\'Chromium\',version:\'131\'}],mobile:false,platform:\'Windows\'};uad.getHighEntropyValues=function(h){return Promise.resolve({brands:uad.brands,mobile:false,platform:\'Windows\',platformVersion:\'10.0.0\',architecture:\'x86\',bitness:\'64\',uaFullVersion:\'131.0.0.0\'});};Object.defineProperty(navigator,\'userAgentData\',{get:function(){return uad;}});}catch(e){}}}catch(e){}})();"
+    invoke-static {}, Lzua;->spoofJs()Ljava/lang/String;
+
+    move-result-object p0
 
     invoke-virtual {p1, p0, v1}, Landroid/webkit/WebView;->evaluateJavascript(Ljava/lang/String;Landroid/webkit/ValueCallback;)V
 
@@ -803,6 +828,14 @@
     .line 24
     .line 25
     :cond_1
+    iget-object v1, p0, Lhr;->b:Ljava/lang/String;
+
+    invoke-static {v0, v1}, Lzua;->skip(Ljava/lang/String;Ljava/lang/String;)Z
+
+    move-result v1
+
+    if-nez v1, :goto_5
+
     iget-object v1, p0, Lhr;->a:[Ljava/lang/String;
 
     .line 26
