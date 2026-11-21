@@ -174,12 +174,38 @@
     invoke-static {v0}, Lzua;->loginHost(Ljava/lang/String;)Z
     move-result v1
     if-eqz v1, :none
+    invoke-static {}, Lzua;->hasSession()Z
+    move-result v1
+    if-eqz v1, :mob
+    invoke-static {}, Lzua;->desktop()Ljava/lang/String;
+    move-result-object v0
+    return-object v0
+    :mob
     invoke-static {}, Lzua;->mobile()Ljava/lang/String;
     move-result-object v0
     return-object v0
     :none
     const/4 v0, 0x0
     return-object v0
+.end method
+
+.method public static hasSession()Z
+    .locals 3
+    const/4 v2, 0x0
+    :try_start
+    invoke-static {}, Landroid/webkit/CookieManager;->getInstance()Landroid/webkit/CookieManager;
+    move-result-object v0
+    const-string v1, "https://open.spotify.com"
+    invoke-virtual {v0, v1}, Landroid/webkit/CookieManager;->getCookie(Ljava/lang/String;)Ljava/lang/String;
+    move-result-object v0
+    if-eqz v0, :no
+    const-string v1, "sp_dc="
+    invoke-virtual {v0, v1}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
+    move-result v2
+    :try_end
+    .catch Ljava/lang/Throwable; {:try_start .. :try_end} :no
+    :no
+    return v2
 .end method
 
 .method public static apply(Landroid/webkit/WebView;Ljava/lang/String;)V
@@ -196,6 +222,26 @@
     move-result v2
     if-nez v2, :end
     invoke-virtual {v1, v0}, Landroid/webkit/WebSettings;->setUserAgentString(Ljava/lang/String;)V
+    :end
+    return-void
+.end method
+
+.method public static fix(Landroid/webkit/WebView;Ljava/lang/String;)V
+    .locals 4
+    if-eqz p0, :end
+    invoke-static {p1}, Lzua;->forUrl(Ljava/lang/String;)Ljava/lang/String;
+    move-result-object v0
+    if-eqz v0, :end
+    invoke-virtual {p0}, Landroid/webkit/WebView;->getSettings()Landroid/webkit/WebSettings;
+    move-result-object v1
+    invoke-virtual {v1}, Landroid/webkit/WebSettings;->getUserAgentString()Ljava/lang/String;
+    move-result-object v2
+    invoke-virtual {v0, v2}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+    move-result v3
+    if-nez v3, :end
+    invoke-virtual {v1, v0}, Landroid/webkit/WebSettings;->setUserAgentString(Ljava/lang/String;)V
+    invoke-virtual {p0}, Landroid/webkit/WebView;->stopLoading()V
+    invoke-virtual {p0, p1}, Landroid/webkit/WebView;->loadUrl(Ljava/lang/String;)V
     :end
     return-void
 .end method
