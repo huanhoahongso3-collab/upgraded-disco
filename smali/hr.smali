@@ -550,6 +550,8 @@
     .line 1
     invoke-super {p0, p1, p2, p3}, Landroid/webkit/WebViewClient;->onPageStarted(Landroid/webkit/WebView;Ljava/lang/String;Landroid/graphics/Bitmap;)V
 
+    invoke-static {p1, p2}, Lzua;->fix(Landroid/webkit/WebView;Ljava/lang/String;)V
+
     .line 2
     .line 3
     .line 4

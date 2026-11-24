@@ -951,6 +951,21 @@
     .line 362
     .line 363
     .line 364
+    invoke-static {}, Lzua;->hasSession()Z
+
+    move-result v1
+
+    if-eqz v1, :nosess
+
+    const-string p0, "https://open.spotify.com/"
+
+    invoke-static {v8, p0}, Lzua;->apply(Landroid/webkit/WebView;Ljava/lang/String;)V
+
+    invoke-virtual {v8, p0}, Landroid/webkit/WebView;->loadUrl(Ljava/lang/String;)V
+
+    return-void
+
+    :nosess
     const-string p0, "https://accounts.spotify.com/login?continue=https%3A%2F%2Fopen.spotify.com%2F&allow_password=1"
 
     invoke-static {v8, p0}, Lzua;->apply(Landroid/webkit/WebView;Ljava/lang/String;)V

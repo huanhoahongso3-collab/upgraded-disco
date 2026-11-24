@@ -174,13 +174,6 @@
     invoke-static {v0}, Lzua;->loginHost(Ljava/lang/String;)Z
     move-result v1
     if-eqz v1, :none
-    invoke-static {}, Lzua;->hasSession()Z
-    move-result v1
-    if-eqz v1, :mob
-    invoke-static {}, Lzua;->desktop()Ljava/lang/String;
-    move-result-object v0
-    return-object v0
-    :mob
     invoke-static {}, Lzua;->mobile()Ljava/lang/String;
     move-result-object v0
     return-object v0
@@ -229,6 +222,12 @@
 .method public static fix(Landroid/webkit/WebView;Ljava/lang/String;)V
     .locals 4
     if-eqz p0, :end
+    invoke-static {p1}, Lzua;->host(Ljava/lang/String;)Ljava/lang/String;
+    move-result-object v0
+    const-string v1, "accounts.spotify.com"
+    invoke-static {v0, v1}, Lzua;->ends(Ljava/lang/String;Ljava/lang/String;)Z
+    move-result v0
+    if-eqz v0, :end
     invoke-static {p1}, Lzua;->forUrl(Ljava/lang/String;)Ljava/lang/String;
     move-result-object v0
     if-eqz v0, :end
