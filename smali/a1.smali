@@ -650,6 +650,8 @@
     .line 174
     check-cast p0, Landroid/app/Activity;
 
+    move-object v4, p0
+
     .line 175
     .line 176
     invoke-virtual {p0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
@@ -684,6 +686,30 @@
 
     .line 191
     .line 192
+    check-cast v4, Landroid/app/Activity;
+
+    invoke-virtual {v4}, Landroid/app/Activity;->isFinishing()Z
+
+    move-result p0
+
+    if-nez p0, :real_destroy
+
+    const-string p0, "[WD] MainActivity destroyed but not finishing: keeping WebView alive"
+
+    invoke-static {p0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+
+    sget-object p0, Lir;->a:Landroid/app/Dialog;
+
+    if-eqz p0, :keep_nodlg
+
+    invoke-virtual {p0}, Landroid/app/Dialog;->dismiss()V
+
+    :keep_nodlg
+    sput-object v3, Lir;->a:Landroid/app/Dialog;
+
+    return-void
+
+    :real_destroy
     sget-object p0, Lir;->a:Landroid/app/Dialog;
 
     .line 193

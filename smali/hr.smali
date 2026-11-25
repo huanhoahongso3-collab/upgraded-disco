@@ -405,6 +405,12 @@
 .method public final onPageFinished(Landroid/webkit/WebView;Ljava/lang/String;)V
     .locals 5
 
+    const-string v0, "[WD] onPageFinished "
+
+    invoke-static {v0, p2}, Lhr;->wd(Ljava/lang/String;Ljava/lang/Object;)V
+
+    invoke-static {p1}, Lhr;->inj(Landroid/webkit/WebView;)V
+
     .line 1
     if-nez p2, :cond_0
 
@@ -546,6 +552,12 @@
 
 .method public final onPageStarted(Landroid/webkit/WebView;Ljava/lang/String;Landroid/graphics/Bitmap;)V
     .locals 6
+
+    const-string v0, "[WD] onPageStarted "
+
+    invoke-static {v0, p2}, Lhr;->wd(Ljava/lang/String;Ljava/lang/Object;)V
+
+    invoke-static {p1}, Lhr;->inj(Landroid/webkit/WebView;)V
 
     .line 1
     invoke-super {p0, p1, p2, p3}, Landroid/webkit/WebViewClient;->onPageStarted(Landroid/webkit/WebView;Ljava/lang/String;Landroid/graphics/Bitmap;)V
@@ -769,6 +781,14 @@
     invoke-static {}, Lzua;->spoofJs()Ljava/lang/String;
 
     move-result-object p0
+
+    invoke-virtual {p1, p0, v1}, Landroid/webkit/WebView;->evaluateJavascript(Ljava/lang/String;Landroid/webkit/ValueCallback;)V
+
+    const-string p0, "(function(){if(window.__wd)return;window.__wd=true;var AB=window.androidBridge;var L=function(m){try{AB.onIdNotFound(\'[WD] \'+m);}catch(e){}};var hd=Object.getOwnPropertyDescriptor(Document.prototype,\'hidden\');var vd=Object.getOwnPropertyDescriptor(Document.prototype,\'visibilityState\');var real=function(){try{return hd.get.call(document)+\'/\'+vd.get.call(document);}catch(e){return \'?\';}};L(\'inject real=\'+real()+\' url=\'+location.href.substring(0,60));[\'visibilitychange\',\'pagehide\',\'pageshow\',\'freeze\',\'resume\',\'blur\',\'focus\',\'online\',\'offline\'].forEach(function(n){window.addEventListener(n,function(e){L(\'evt \'+n+\' real=\'+real());},true);document.addEventListener(n,function(e){L(\'doc-evt \'+n+\' real=\'+real());},true);});[\'play\',\'playing\',\'pause\',\'ended\',\'waiting\',\'stalled\',\'suspend\',\'emptied\',\'error\',\'abort\'].forEach(function(n){document.addEventListener(n,function(e){var t=e.target;L(\'media \'+n+\' tag=\'+t.tagName+\' ct=\'+Math.round(t.currentTime)+\' rs=\'+t.readyState+\' ns=\'+t.networkState+\' paused=\'+t.paused+\' real=\'+real());},true);});var last=Date.now();setInterval(function(){var now=Date.now();var a=document.querySelectorAll(\'audio,video\');L(\'hb gap=\'+(now-last)+\'ms real=\'+real()+\' media=\'+Array.prototype.map.call(a,function(x){return x.tagName+\':\'+(x.paused?\'P\':\'R\')+\':\'+Math.round(x.currentTime);}).join(\',\'));last=now;},5000);})();"
+
+    invoke-virtual {p1, p0, v1}, Landroid/webkit/WebView;->evaluateJavascript(Ljava/lang/String;Landroid/webkit/ValueCallback;)V
+
+    const-string p0, "(function(){if(window.__keepAlive)return;window.__keepAlive=true;try{Object.defineProperty(document,\'hidden\',{get:function(){return false;},configurable:true});Object.defineProperty(document,\'visibilityState\',{get:function(){return \'visible\';},configurable:true});Object.defineProperty(document,\'webkitHidden\',{get:function(){return false;},configurable:true});Object.defineProperty(document,\'webkitVisibilityState\',{get:function(){return \'visible\';},configurable:true});}catch(e){}[\'visibilitychange\',\'webkitvisibilitychange\',\'pagehide\',\'freeze\',\'blur\'].forEach(function(n){window.addEventListener(n,function(e){e.stopImmediatePropagation();},true);document.addEventListener(n,function(e){e.stopImmediatePropagation();},true);});})();"
 
     invoke-virtual {p1, p0, v1}, Landroid/webkit/WebView;->evaluateJavascript(Ljava/lang/String;Landroid/webkit/ValueCallback;)V
 
@@ -1655,4 +1675,83 @@
 
     .line 389
     return-object p0
+.end method
+
+.method public static wd(Ljava/lang/String;Ljava/lang/Object;)V
+    .locals 2
+
+    new-instance v0, Ljava/lang/StringBuilder;
+
+    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
+
+    invoke-virtual {v0, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    invoke-static {p1}, Ljava/lang/String;->valueOf(Ljava/lang/Object;)Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v0
+
+    invoke-static {v0}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+
+    return-void
+.end method
+
+.method public onRenderProcessGone(Landroid/webkit/WebView;Landroid/webkit/RenderProcessGoneDetail;)Z
+    .locals 2
+
+    invoke-virtual {p2}, Landroid/webkit/RenderProcessGoneDetail;->didCrash()Z
+
+    move-result v0
+
+    invoke-static {v0}, Ljava/lang/Boolean;->valueOf(Z)Ljava/lang/Boolean;
+
+    move-result-object v0
+
+    const-string v1, "[WD] onRenderProcessGone didCrash="
+
+    invoke-static {v1, v0}, Lhr;->wd(Ljava/lang/String;Ljava/lang/Object;)V
+
+    invoke-virtual {p2}, Landroid/webkit/RenderProcessGoneDetail;->rendererPriorityAtExit()I
+
+    move-result v0
+
+    invoke-static {v0}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
+
+    move-result-object v0
+
+    const-string v1, "[WD] rendererPriorityAtExit="
+
+    invoke-static {v1, v0}, Lhr;->wd(Ljava/lang/String;Ljava/lang/Object;)V
+
+    const/4 v0, 0x1
+
+    return v0
+.end method
+
+.method public static inj(Landroid/webkit/WebView;)V
+    .locals 3
+
+    if-eqz p0, :done
+
+    const/4 v1, 0x0
+
+    const-string v0, "(function(){if(window.__wd)return;window.__wd=true;var AB=window.androidBridge;var L=function(m){try{AB.onIdNotFound(\'[WD] \'+m);}catch(e){}};var hd=Object.getOwnPropertyDescriptor(Document.prototype,\'hidden\');var vd=Object.getOwnPropertyDescriptor(Document.prototype,\'visibilityState\');var real=function(){try{return hd.get.call(document)+\'/\'+vd.get.call(document);}catch(e){return \'?\';}};L(\'inject real=\'+real()+\' url=\'+location.href.substring(0,60));[\'visibilitychange\',\'pagehide\',\'pageshow\',\'freeze\',\'resume\',\'blur\',\'focus\',\'online\',\'offline\'].forEach(function(n){window.addEventListener(n,function(e){L(\'evt \'+n+\' real=\'+real());},true);document.addEventListener(n,function(e){L(\'doc-evt \'+n+\' real=\'+real());},true);});[\'play\',\'playing\',\'pause\',\'ended\',\'waiting\',\'stalled\',\'suspend\',\'emptied\',\'error\',\'abort\'].forEach(function(n){document.addEventListener(n,function(e){var t=e.target;L(\'media \'+n+\' tag=\'+t.tagName+\' ct=\'+Math.round(t.currentTime)+\' rs=\'+t.readyState+\' ns=\'+t.networkState+\' paused=\'+t.paused+\' real=\'+real());},true);});var last=Date.now();setInterval(function(){var now=Date.now();var a=document.querySelectorAll(\'audio,video\');L(\'hb gap=\'+(now-last)+\'ms real=\'+real()+\' media=\'+Array.prototype.map.call(a,function(x){return x.tagName+\':\'+(x.paused?\'P\':\'R\')+\':\'+Math.round(x.currentTime);}).join(\',\'));last=now;},5000);})();"
+
+    invoke-virtual {p0, v0, v1}, Landroid/webkit/WebView;->evaluateJavascript(Ljava/lang/String;Landroid/webkit/ValueCallback;)V
+
+    const-string v0, "(function(){if(window.__keepAlive)return;window.__keepAlive=true;try{Object.defineProperty(document,\'hidden\',{get:function(){return false;},configurable:true});Object.defineProperty(document,\'visibilityState\',{get:function(){return \'visible\';},configurable:true});Object.defineProperty(document,\'webkitHidden\',{get:function(){return false;},configurable:true});Object.defineProperty(document,\'webkitVisibilityState\',{get:function(){return \'visible\';},configurable:true});}catch(e){}[\'visibilitychange\',\'webkitvisibilitychange\',\'pagehide\',\'freeze\',\'blur\'].forEach(function(n){window.addEventListener(n,function(e){e.stopImmediatePropagation();},true);document.addEventListener(n,function(e){e.stopImmediatePropagation();},true);});})();"
+
+    invoke-virtual {p0, v0, v1}, Landroid/webkit/WebView;->evaluateJavascript(Ljava/lang/String;Landroid/webkit/ValueCallback;)V
+
+    const-string v0, "(function(){if(window.__wdm)return;window.__wdm=true;var AB=window.androidBridge;var L=function(m){try{AB.onIdNotFound(\'[WD] \'+m);}catch(e){}};var hd=Object.getOwnPropertyDescriptor(Document.prototype,\'hidden\');var real=function(){try{return hd.get.call(document)?\'hidden\':\'visible\';}catch(e){return \'?\';}};var st=function(){try{return (new Error()).stack.split(\'\\n\').slice(2,5).join(\' | \').replace(/https?:\\/\\/[^ )]*\\//g,\'\');}catch(e){return \'\';}};var d=function(t){return t.tagName+\'#\'+(t.__id||(t.__id=Math.floor(Math.random()*9999)))+\' ct=\'+Math.round(t.currentTime)+\' rs=\'+t.readyState+\' vol=\'+t.volume+\' mut=\'+t.muted;};var P=HTMLMediaElement.prototype;var op=P.play,oa=P.pause;P.play=function(){L(\'M.play \'+d(this)+\' app=\'+real());return op.apply(this,arguments);};P.pause=function(){L(\'M.pause \'+d(this)+\' app=\'+real()+\' by=\'+st());return oa.apply(this,arguments);};var oc=document.createElement;document.createElement=function(n){var e=oc.apply(this,arguments);if(/^(audio|video)$/i.test(n))L(\'M.create \'+n);return e;};var OA=window.Audio;if(OA){window.Audio=function(){L(\'M.newAudio\');return new OA(...arguments);};window.Audio.prototype=OA.prototype;}[\'AudioContext\',\'webkitAudioContext\'].forEach(function(k){var C=window[k];if(!C)return;var N=function(){var c=new (Function.prototype.bind.apply(C,[null].concat([].slice.call(arguments))))();L(\'AC.new \'+k+\' state=\'+c.state);c.addEventListener(\'statechange\',function(){L(\'AC.state \'+c.state+\' app=\'+real()+\' t=\'+Math.round(c.currentTime*10)/10);});var or=c.resume;c.resume=function(){L(\'AC.resume was=\'+c.state);return or.apply(c,arguments);};var os=c.suspend;c.suspend=function(){L(\'AC.suspend app=\'+real()+\' by=\'+st());return os.apply(c,arguments);};return c;};N.prototype=C.prototype;window[k]=N;});try{if(navigator.mediaSession){var oh=navigator.mediaSession.setActionHandler.bind(navigator.mediaSession);var ops=Object.getOwnPropertyDescriptor(MediaSession.prototype,\'playbackState\');if(ops&&ops.set){Object.defineProperty(navigator.mediaSession,\'playbackState\',{set:function(v){L(\'MS.state \'+v+\' app=\'+real());ops.set.call(this,v);},get:function(){return ops.get.call(this);},configurable:true});}}}catch(e){}L(\'hooks installed\');})();"
+
+    invoke-virtual {p0, v0, v1}, Landroid/webkit/WebView;->evaluateJavascript(Ljava/lang/String;Landroid/webkit/ValueCallback;)V
+
+    :done
+    return-void
 .end method

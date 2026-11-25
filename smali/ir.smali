@@ -405,6 +405,30 @@
     .line 75
     .line 76
     .line 77
+    sget-object v8, Lir;->b:Landroid/webkit/WebView;
+
+    if-eqz v8, :new_wv
+
+    invoke-virtual {v8}, Landroid/view/View;->getParent()Landroid/view/ViewParent;
+
+    move-result-object v9
+
+    if-eqz v9, :no_parent
+
+    check-cast v9, Landroid/view/ViewGroup;
+
+    invoke-virtual {v9, v8}, Landroid/view/ViewGroup;->removeView(Landroid/view/View;)V
+
+    :no_parent
+    const/4 v10, 0x1
+
+    const-string v9, "[WD] reusing existing WebView in new activity"
+
+    invoke-static {v9}, Lde/robv/android/xposed/XposedBridge;->log(Ljava/lang/String;)V
+
+    goto :attach_wv
+
+    :new_wv
     new-instance v8, Landroid/webkit/WebView;
 
     .line 78
@@ -654,6 +678,14 @@
     .line 210
     invoke-virtual {v8, v9}, Landroid/webkit/WebView;->setWebViewClient(Landroid/webkit/WebViewClient;)V
 
+    const/4 v9, 0x2
+
+    const/4 v10, 0x0
+
+    invoke-virtual {v8, v9, v10}, Landroid/webkit/WebView;->setRendererPriorityPolicy(IZ)V
+
+    :attach_wv
+
     .line 211
     .line 212
     .line 213
@@ -750,6 +782,12 @@
     .line 264
     :cond_1
     invoke-virtual {v0}, Landroid/app/Dialog;->show()V
+
+    if-eqz v10, :fresh_wv
+
+    return-void
+
+    :fresh_wv
 
     .line 265
     .line 266
